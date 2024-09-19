@@ -34,4 +34,4 @@ contraseña: G@rz@G@rcí@
 ```
 
 ## Para HTTPS
-Para acceder a través de https seguir las instrucciones para generar un proxy inverso con apache del siguiente [sitio](https://www.vultr.com/docs/how-to-configure-apache-as-a-reverse-proxy-with-mod-proxy-54152/?lang=es&utm_source=performance-max-na&utm_medium=paidmedia&obility_id=16876066992&utm_adgroup=&utm_campaign=&utm_term=&utm_content=&gclid=Cj0KCQiA-JacBhC0ARIsAIxybyNzy46DDBNftZkMzMNtDifRRHBlVqF8uYTwlP52U3b0RauaQvmlN64aAuhmEALw_wcB):
+Para acceder a través de https seguir las instrucciones para generar un proxy inverso con apache en el [siguiente sitio](https://www.vultr.com/docs/how-to-configure-apache-as-a-reverse-proxy-with-mod-proxy-54152/?lang=es&utm_source=performance-max-na&utm_medium=paidmedia&obility_id=16876066992&utm_adgroup=&utm_campaign=&utm_term=&utm_content=&gclid=Cj0KCQiA-JacBhC0ARIsAIxybyNzy46DDBNftZkMzMNtDifRRHBlVqF8uYTwlP52U3b0RauaQvmlN64aAuhmEALw_wcB):
