@@ -1,0 +1,35 @@
+{% load static i18n %}
+<div class="row drag-drop-container mt-3" data-name-description="{{ name_description }}" data-kind="{{ kind }}" data-max="{{ max }}" data-accept="{{ accept }}">
+    <div class="col-12 p-3">
+        <p>
+            {% blocktranslate %}You can create a GeoJson file in QGIS or in ArcGis. The file should have at least one polygon describing the {{ field }}.{% endblocktranslate %}
+            {% blocktranslate %}Layer name is the name that will be displayed on the policy lever drop down menu.{% endblocktranslate %} <span class="color-secondary"> 
+            {% blocktranslate trimmed %}The file should include at least two attributes: ID (with a unique identifier) and DENSITY (describing the population density in 
+            inhabitants per hectare for each polygon).{% endblocktranslate %}</span>
+        </p>
+    </div>
+    <div class="col-6">
+        <div class="w-100 file-drag-drop text-center p-3 dashed-container">
+            <img class="w-25" src="{% static 'images/cloud.png' %}" alt="">
+            <p class="file-message">{% translate "Drag and Drop" %}</p>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="w-100 input-drag-drop p-3 dashed-container text-center">
+            <p>{% translate "Or choose a file" %}</p>
+            <button type="button" class="btn btn-sm btn-custom borders-secondary btn-browse">{% translate "Browse your files" %}</button>
+            <input class="dummy-input d-none" type="file" name="" accept="{{ accept }}"><br>
+            <span class="my-2">{% blocktranslate %}Supported filetype: {{ accept }}{% endblocktranslate %}</span><br>
+            <a class="color-secondary" href="">{% translate "Download example file" %}</a>
+        </div>
+    </div>
+    <div class="col-12 mt-3">
+        <table class="table files-container">
+            <tr class="bg-dark text-light text-center">
+                <th>{% translate "File" %}</th>
+                <th>{% translate "Download" %}</th>
+                <th>{% translate "Delete" %}</th>
+            </tr>
+        </table>
+    </div>
+</div>

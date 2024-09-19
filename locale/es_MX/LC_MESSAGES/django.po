@@ -1,0 +1,1887 @@
+# Translations for the urban_performance project
+# Copyright (C) 2024 Capsus
+# Capsus <capsus@example.com>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-09-13 16:57+0000\n"
+"Language: es-mx\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: config/settings/base.py:36 urban_performance/templates/base.html:150
+msgid "English"
+msgstr "Inglés"
+
+#: config/settings/base.py:37 urban_performance/templates/base.html:151
+msgid "Spanish"
+msgstr "Español"
+
+#: urban_performance/api/apps.py:9
+msgid "API"
+msgstr "API"
+
+#: urban_performance/api/views.py:50
+#: urban_performance/projects/serializers.py:53
+msgid "Please introduce a valid CSV file."
+msgstr "Por favor introduzca un archivo CSV válido."
+
+#: urban_performance/projects/apps.py:9
+msgid "Projects"
+msgstr "Proyectos"
+
+#: urban_performance/projects/models.py:15
+msgid "Base Layer Control"
+msgstr "Control de capa base"
+
+#: urban_performance/projects/models.py:16
+msgid "Layer Control"
+msgstr "Control de capa"
+
+#: urban_performance/projects/models.py:17
+#, fuzzy
+#| msgid "Base Layer Control"
+msgid "Scales Layer Control"
+msgstr "Control de capa base"
+
+#: urban_performance/projects/models.py:18
+msgid "Switch Control"
+msgstr "Control del interruptor"
+
+#: urban_performance/projects/models.py:19
+msgid "Range Control"
+msgstr "Control de rango"
+
+#: urban_performance/projects/models.py:23
+msgid "Processing proyect"
+msgstr "Procesando projecto"
+
+#: urban_performance/projects/models.py:24
+msgid "Ready to use"
+msgstr "Listo para usar"
+
+#: urban_performance/projects/models.py:25
+msgid "Error"
+msgstr ""
+
+#: urban_performance/projects/serializers.py:47
+msgid "Invalid assumptions data"
+msgstr "Datos de assumptions inválidos."
+
+#: urban_performance/templates/403.html:4
+#: urban_performance/templates/403.html:6
+#: urban_performance/templates/403_csrf.html:4
+#: urban_performance/templates/403_csrf.html:6
+msgid "Forbidden (403)"
+msgstr "Prohibido (403)"
+
+#: urban_performance/templates/403.html:11
+#: urban_performance/templates/403_csrf.html:11
+msgid "You're not allowed to access this page."
+msgstr "No tienes permitido acceder a esta página."
+
+#: urban_performance/templates/404.html:4
+#: urban_performance/templates/404.html:6
+msgid "Page not found"
+msgstr "Página no encontrada"
+
+#: urban_performance/templates/404.html:11
+msgid "This is not the page you were looking for."
+msgstr "Esta no es la página que estabas buscando."
+
+#: urban_performance/templates/500.html:4
+msgid "Server Error"
+msgstr "Error del servidor"
+
+#: urban_performance/templates/500.html:7
+msgid "Ooops!!! 500"
+msgstr "Uuups!!! 500"
+
+#: urban_performance/templates/500.html:8
+msgid "Looks like something went wrong!"
+msgstr "¡Parece que algo salió mal!"
+
+#: urban_performance/templates/500.html:10
+msgid ""
+"We track these errors automatically, but if the problem persists feel free "
+"to contact us. In the meantime, try refreshing."
+msgstr ""
+"Realizamos un seguimiento de estos errores automáticamente, pero si el "
+"problema persiste, no dude en contactarnos. Mientras tanto, intenta "
+"refrescar la página."
+
+#: urban_performance/templates/account/login.html:5
+#: urban_performance/templates/account/login.html:20
+#: urban_performance/templates/account/login.html:33
+#: urban_performance/templates/allauth/layouts/entrance.html:8
+#: urban_performance/templates/base.html:139
+msgid "Sign In"
+msgstr "Iniciar sesión"
+
+#: urban_performance/templates/account/login.html:35
+#: urban_performance/templates/account/signup.html:12
+#: urban_performance/templates/account/signup.html:27
+msgid "Sign Up"
+msgstr "Regístrate"
+
+#: urban_performance/templates/account/login.html:36
+msgid "Pre Register"
+msgstr "Pre registro"
+
+#: urban_performance/templates/account/login.html:44
+msgid "Mail me a sign-in code"
+msgstr "Envíame un código de inicio de sesión"
+
+#: urban_performance/templates/account/logout.html:21
+#: urban_performance/templates/account/logout.html:30
+#: urban_performance/templates/base.html:133
+msgid "Sign Out"
+msgstr "Cerrar sesión"
+
+#: urban_performance/templates/account/logout.html:25
+msgid "Are you sure you want to sign out?"
+msgstr "¿Estás seguro de que quieres cerrar sesión?"
+
+#: urban_performance/templates/account/logout.html:31
+msgid "Take me back"
+msgstr "Atrás"
+
+#: urban_performance/templates/account/signup.html:4
+msgid "Signup"
+msgstr "Registro"
+
+#: urban_performance/templates/account/signup.html:15
+msgid "Already have an account? Then please"
+msgstr "¿Ya tienes una cuenta? Entonces por favor"
+
+#: urban_performance/templates/account/signup.html:15
+msgid "sign in"
+msgstr "inicia sesión"
+
+#: urban_performance/templates/base.html:71
+#: urban_performance/templates/projects/proyecto_detail.html:22
+msgid "Now"
+msgstr "Ahora"
+
+#: urban_performance/templates/base.html:75
+msgid "This is a demo version. Some functionalities are limited. Please"
+msgstr ""
+"Esta es una versión demo. Algunas funcionalidades son limitadas. Por favor"
+
+#: urban_performance/templates/base.html:75
+msgid "contact us"
+msgstr "contactáctenos"
+
+#: urban_performance/templates/base.html:75
+msgid "for further information"
+msgstr "para mayor información"
+
+#: urban_performance/templates/base.html:116
+msgid "About the tool"
+msgstr "Acerca de"
+
+#: urban_performance/templates/base.html:168
+msgid "Close"
+msgstr "Cerrar"
+
+#: urban_performance/templates/base.html:189
+msgid "Use this document as a way to quick start any new project."
+msgstr ""
+"Utilice este documento como una forma de iniciar rápidamente cualquier "
+"proyecto nuevo."
+
+#: urban_performance/templates/emails/allow_registration.html:6
+msgid "Your Registration is Authorized"
+msgstr "Su registro está autorizado"
+
+#: urban_performance/templates/emails/allow_registration.html:28
+msgid "Dear"
+msgstr "Estimado"
+
+#: urban_performance/templates/emails/allow_registration.html:29
+msgid ""
+"Congratulations! Your email has been authorized. You are now one step closer "
+"to joining the Urban Performance community."
+msgstr ""
+"¡Felicidades! Su correo electrónico ha sido autorizado. Ahora estás un paso "
+"más cerca de unirte a la comunidad Urban Performance."
+
+#: urban_performance/templates/emails/allow_registration.html:31
+msgid "Complete your registration by clicking the button below:"
+msgstr "Complete su registro haciendo clic en el siguiente botón:"
+
+#: urban_performance/templates/emails/allow_registration.html:32
+msgid "Complete Registration"
+msgstr "Registro completo"
+
+#: urban_performance/templates/emails/allow_registration.html:34
+msgid "We look forward to welcoming you!"
+msgstr "¡Esperamos darle la bienvenida!"
+
+#: urban_performance/templates/emails/allow_registration.html:35
+msgid "Sincerely"
+msgstr "Atentamente"
+
+#: urban_performance/templates/emails/allow_registration.html:36
+#: urban_performance/templates/emails/email_confirmation.html:33
+msgid "The Urban Performance Team"
+msgstr "El equipo de Urban Performance"
+
+#: urban_performance/templates/emails/email_confirmation.html:5
+msgid "Confirm Your Email & Join the Waitlist"
+msgstr "Confirme su correo electrónico y únase a la lista de espera"
+
+#: urban_performance/templates/emails/email_confirmation.html:23
+msgid "Hi"
+msgstr "Hola"
+
+#: urban_performance/templates/emails/email_confirmation.html:24
+msgid ""
+"Thanks for your interest in Urban Performance! To secure your spot on our "
+"waitlist, please confirm your email address by clicking the button below:"
+msgstr ""
+"¡Gracias por tu interés en Urban Performance! Para asegurar su lugar en "
+"nuestra lista de espera, confirme su dirección de correo electrónico "
+"haciendo clic en el botón a continuación:"
+
+#: urban_performance/templates/emails/email_confirmation.html:27
+msgid "Confirm Email"
+msgstr "Confirma correo electrónico"
+
+#: urban_performance/templates/emails/email_confirmation.html:29
+msgid ""
+"Once confirmed, you'll be among the first to know when registration opens."
+msgstr ""
+"Una vez confirmado, será de los primeros en saber cuándo se abre el plazo de "
+"inscripción."
+
+#: urban_performance/templates/emails/email_confirmation.html:31
+msgid "We can't wait to have you join us!"
+msgstr "¡No podemos esperar a que te unas a nosotros!"
+
+#: urban_performance/templates/emails/email_confirmation.html:32
+msgid "Best Regards"
+msgstr "Saludos cordiales"
+
+#: urban_performance/templates/pages/about.html:8
+#: urban_performance/templates/projects/proyecto_detail.html:150
+msgid "About"
+msgstr "Acerca de"
+
+#: urban_performance/templates/pages/about.html:13
+msgid ""
+"The urban development scenario simulator is a tool that estimates the "
+"expected environmental, social, and economic impacts of implementing public "
+"policies in urban development, mobility, and the environment. Its objective "
+"is to test various scenarios of urban expansion, population density, land "
+"use, public transport routes, creation of employment-attracting areas, as "
+"well as changes in water and energy consumption, and improvements in "
+"transport technologies; to demonstrate their benefits or implications "
+"through various metrics that contribute to decision-making and to raising "
+"awareness among the population about the impacts of cities, their dynamics "
+"and the possibilities to improve their sustainability."
+msgstr ""
+"El modelador urbano es una herramienta que predice los efectos de las "
+"decisiones urbanas. Nos muestra cómo cambios en el transporte, el uso "
+"del suelo o la densidad poblacional impactan el medio ambiente, la "
+"sociedad y la economía. Con esto, podemos elegir como comunidad las mejores "
+"opciones para un municipio sostenible."
+
+#: urban_performance/templates/pages/about.html:34
+msgid "How does this tool work?"
+msgstr "¿Cómo funciona esta herramienta?"
+
+#: urban_performance/templates/pages/about.html:37
+#, fuzzy
+#| msgid ""
+#| "Urban Performance (UP) is a web-based tool that helps cities evaluate "
+#| "their current sustainability and plan for the future. It uses a set of "
+#| "sustainability indicators (statistical measures) to compare a city's "
+#| "current performance against different scenarios. These scenarios are "
+#| "created by combining various policy interventions, called policy levers."
+msgid ""
+"The Scenario Simulator is a web-based tool that helps stakeholders assess "
+"the municipality's plans. It uses a set of sustainability indicators to "
+"compare a city's current performance against different scenarios. These "
+"scenarios are created by combining several policy interventions, called "
+"policy levers."
+msgstr ""
+"El modelador urbano  es una herramienta basada en web que ayuda a evaluar "
+"su sostenibilidad actual y los plan para el futuro. Utiliza un conjunto "
+"de indicadores de sostenibilidad para comparar el desempeño actual de "
+"una ciudad frente a diferentes escenarios. Estos escenarios son creados "
+"combinando varias intervenciones políticas, llamadas palancas de políticas "
+"públicas."
+
+#: urban_performance/templates/pages/about.html:42
+msgid "The simulator can facilitate the following activities:"
+msgstr ""
+
+#: urban_performance/templates/pages/about.html:45
+#, fuzzy
+#| msgid ""
+#| "Analyze current performance: Identify strengths, weaknesses, and areas "
+#| "for improvement."
+msgid ""
+"Analyze current performance: Identify strengths, weaknesses, and areas for\n"
+"                improvement."
+msgstr ""
+"Analizar el rendimiento actual: Identificar las fortalezas, debilidades, y "
+"las áreas de mejora."
+
+#: urban_performance/templates/pages/about.html:47
+#, fuzzy
+#| msgid ""
+#| "Test different scenarios: See how various policy combinations (e.g., "
+#| "infrastructure, regulations) impact future sustainability."
+msgid ""
+"Test different scenarios: See how various combinations of policies (e.g., "
+"infrastructure, regulations) impact sustainability in the future."
+msgstr ""
+"Probar diferentes escenarios: Ver cómo varias combinaciones de políticas "
+"(por ejemplo, infraestructura, regulaciones) impactan la sostenibilidad en "
+"el futuro."
+
+#: urban_performance/templates/pages/about.html:50
+#, fuzzy
+#| msgid ""
+#| "Make data-driven decisions: Choose the policy mix that best promotes "
+#| "sustainable development based on concrete results from each scenario."
+msgid ""
+"Make data-driven decisions: Choose the combination of policies that best "
+"advance toward sustainable development."
+msgstr ""
+"Tomar decisiones basadas en datos: Elegir la combinación de políticas "
+"que mejor promuevan el desarrollo sostenible en función de resultados "
+"concretos de cada escenario."
+
+#: urban_performance/templates/pages/about.html:53
+msgid ""
+"\n"
+"        The simulator is an IMPLANG initiative. Its main goal is to support "
+"consensus building and integrated planning\n"
+"        to encourage the construction of a brighter and more sustainable "
+"future. <br>\n"
+"        The simulator results from a joint effort between IMPLANG, the Mario "
+"Molina Center, CAPSUS, and UPTech.\n"
+"        "
+msgstr ""
+"\n"
+"El modelador urbano es una iniciativa del IMPLANG y tiene la finalidad de "
+"facilitar la formación de consenso y la planeación integrada, facilitando "
+"la construcción de un futuro más brillante y sostenible. <br>\n"
+"El modelador urbano es resultado de un trabajo conjunto entre el IMPLANG, "
+"el Centro Mario Molina, CAPSUS y UPTech."
+
+
+#: urban_performance/templates/projects/files_selector.html:5
+#, python-format
+msgid ""
+"You can create a GeoJson file in QGIS or in ArcGis. The file should have at "
+"least one polygon describing the %(field)s."
+msgstr ""
+"Puede crear un archivo GeoJson en QGIS o en ArcGis. El archivo debe tener al "
+"menos menos un polígono que describa los %(field)s."
+
+#: urban_performance/templates/projects/files_selector.html:6
+msgid ""
+"Layer name is the name that will be displayed on the policy lever drop down "
+"menu."
+msgstr ""
+"El nombre de la capa es el nombre que se mostrará en el menú desplegable de "
+"políticas públicas."
+
+#: urban_performance/templates/projects/files_selector.html:7
+msgid ""
+"The file should include at least two attributes: ID (with a unique "
+"identifier) and DENSITY (describing the population density in inhabitants "
+"per hectare for each polygon)."
+msgstr ""
+"El archivo debe incluir al menos dos atributos: ID (con un identificador "
+"único) y DENSIDAD (que describe la densidad de población en habitantes por "
+"hectárea para cada polígono)."
+
+#: urban_performance/templates/projects/files_selector.html:14
+#: urban_performance/templates/projects/proyecto_list.html:118
+#: urban_performance/templates/projects/proyecto_list.html:286
+msgid "Drag and Drop"
+msgstr "Arrastrar y soltar"
+
+#: urban_performance/templates/projects/files_selector.html:19
+#: urban_performance/templates/projects/proyecto_list.html:123
+#: urban_performance/templates/projects/proyecto_list.html:291
+msgid "Or choose a file"
+msgstr "O elige un archivo"
+
+#: urban_performance/templates/projects/files_selector.html:20
+#: urban_performance/templates/projects/proyecto_list.html:124
+#: urban_performance/templates/projects/proyecto_list.html:292
+msgid "Browse your files"
+msgstr "Examina tus archivos"
+
+#: urban_performance/templates/projects/files_selector.html:22
+#, python-format
+msgid "Supported filetype: %(accept)s"
+msgstr "Tipo de archivo admitido: %(accept)s"
+
+#: urban_performance/templates/projects/files_selector.html:23
+#: urban_performance/templates/projects/proyecto_list.html:127
+#: urban_performance/templates/projects/proyecto_list.html:295
+msgid "Download example file"
+msgstr "Descargar archivo de ejemplo"
+
+#: urban_performance/templates/projects/files_selector.html:29
+#: urban_performance/templates/projects/proyecto_list.html:133
+#: urban_performance/templates/projects/proyecto_list.html:301
+msgid "File"
+msgstr "Archivo"
+
+#: urban_performance/templates/projects/files_selector.html:30
+#: urban_performance/templates/projects/proyecto_list.html:134
+#: urban_performance/templates/projects/proyecto_list.html:302
+msgid "Download"
+msgstr "Descargar"
+
+#: urban_performance/templates/projects/files_selector.html:31
+#: urban_performance/templates/projects/proyecto_list.html:32
+#: urban_performance/templates/projects/proyecto_list.html:135
+#: urban_performance/templates/projects/proyecto_list.html:303
+msgid "Delete"
+msgstr "Borrar"
+
+#: urban_performance/templates/projects/proyecto_detail.html:26
+msgid "Scenarios Saved!"
+msgstr "¡Escenarios guardados!"
+
+#: urban_performance/templates/projects/proyecto_detail.html:32
+msgid "Select city"
+msgstr "Selecciona ciudad"
+
+#: urban_performance/templates/projects/proyecto_detail.html:48
+msgid "Edit Scenarios"
+msgstr "Editar escenarios"
+
+#: urban_performance/templates/projects/proyecto_detail.html:50
+msgid "Modify the description of each scenario"
+msgstr "Modificar la descripción de cada escenario"
+
+#: urban_performance/templates/projects/proyecto_detail.html:53
+msgid "Add scenario +"
+msgstr "Agregar escenario +"
+
+#: urban_performance/templates/projects/proyecto_detail.html:62
+msgid "Scenario"
+msgstr "Escenario"
+
+#: urban_performance/templates/projects/proyecto_detail.html:70
+msgid "Name"
+msgstr "Nombre"
+
+#: urban_performance/templates/projects/proyecto_detail.html:77
+#: urban_performance/templates/projects/proyecto_list.html:78
+#: urban_performance/templates/projects/proyecto_list.html:245
+msgid "Description"
+msgstr "Descripción"
+
+#: urban_performance/templates/projects/proyecto_detail.html:90
+#: urban_performance/templates/projects/proyecto_detail.html:183
+#: urban_performance/templates/projects/proyecto_list.html:31
+#: urban_performance/templates/projects/proyecto_list.html:194
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: urban_performance/templates/projects/proyecto_detail.html:91
+#: urban_performance/templates/projects/proyecto_detail.html:185
+#: urban_performance/templates/projects/proyecto_detail.html:204
+#: urban_performance/templates/projects/proyecto_list.html:197
+msgid "Save"
+msgstr "Guardar"
+
+#: urban_performance/templates/projects/proyecto_detail.html:111
+msgid "Scenarios"
+msgstr "Escenarios"
+
+#: urban_performance/templates/projects/proyecto_detail.html:118
+msgid "Edit scenarios"
+msgstr "Editar escenarios"
+
+#: urban_performance/templates/projects/proyecto_detail.html:137
+msgid "Policy levers"
+msgstr "Palancas de políticas públicas"
+
+#: urban_performance/templates/projects/proyecto_detail.html:147
+#: urban_performance/templates/projects/proyecto_detail.html:198
+msgid "Assumptions set up"
+msgstr "Configuración"
+
+#: urban_performance/templates/projects/proyecto_detail.html:148
+msgid "Modify the following table to update the assumptions."
+msgstr "Modificar la siguiente tabla para actualizar las consideraciones."
+
+#: urban_performance/templates/projects/proyecto_detail.html:149
+msgid "Go back to"
+msgstr "Volver a"
+
+#: urban_performance/templates/projects/proyecto_detail.html:150
+msgid "for further information regarding columns in the table."
+msgstr "para más información sobre las columnas de la tabla."
+
+#: urban_performance/templates/projects/proyecto_detail.html:256
+msgid "Maps"
+msgstr "Mapas"
+
+#: urban_performance/templates/projects/proyecto_detail.html:292
+msgid "Indicators"
+msgstr "Indicadores"
+
+#: urban_performance/templates/projects/proyecto_list.html:13
+msgid "Create new project +"
+msgstr "Crear proyecto +"
+
+#: urban_performance/templates/projects/proyecto_list.html:23
+msgid "Delete Project"
+msgstr "Eliminar proyecto"
+
+#: urban_performance/templates/projects/proyecto_list.html:27
+msgid "Are you sure you want to delete the project"
+msgstr "Estás seguro que quieres eliminar el proyecto"
+
+#: urban_performance/templates/projects/proyecto_list.html:48
+msgid "Edit Project"
+msgstr "Editar Proyecto"
+
+#: urban_performance/templates/projects/proyecto_list.html:57
+msgid "1. Project Data"
+msgstr "1. Datos del Proyecto"
+
+#: urban_performance/templates/projects/proyecto_list.html:61
+msgid "2. Project Files"
+msgstr "2. Archivos del Proyecto"
+
+#: urban_performance/templates/projects/proyecto_list.html:71
+msgid "2. Project name"
+msgstr "2. Nombre Proyecto"
+
+#: urban_performance/templates/projects/proyecto_list.html:86
+#: urban_performance/templates/projects/proyecto_list.html:253
+msgid "City"
+msgstr "Ciudad"
+
+#: urban_performance/templates/projects/proyecto_list.html:92
+#: urban_performance/templates/projects/proyecto_list.html:258
+msgid "Please use a different City name."
+msgstr "Utilice un nombre de ciudad diferente."
+
+#: urban_performance/templates/projects/proyecto_list.html:97
+#: urban_performance/templates/projects/proyecto_list.html:103
+#: urban_performance/templates/projects/proyecto_list.html:263
+#: urban_performance/templates/projects/proyecto_list.html:269
+msgid "Allow to be used as template?"
+msgstr "¿Se puede utilizar como plantilla?"
+
+#: urban_performance/templates/projects/proyecto_list.html:108
+#: urban_performance/templates/projects/proyecto_list.html:274
+msgid "Assumptions"
+msgstr "Assumptions"
+
+#: urban_performance/templates/projects/proyecto_list.html:110
+#: urban_performance/templates/projects/proyecto_list.html:277
+msgid ""
+"The file should contain the assumptions that will be used for calculating "
+"the indicators such as capital costs, maintenance costs, elasticities and "
+"return period for natural disasters."
+msgstr ""
+"El archivo debe contener las consideraciones que se utilizarán para calcular "
+"los indicadores tales como costos de capital, costos de mantenimiento, "
+"elasticidades y período de retorno de desastres naturales."
+
+#: urban_performance/templates/projects/proyecto_list.html:112
+#: urban_performance/templates/projects/proyecto_list.html:279
+msgid "assumptions in this file will be used for all the scenarios."
+msgstr ""
+"las consideraciones de este archivo se utilizarán para todos los escenarios."
+
+#: urban_performance/templates/projects/proyecto_list.html:126
+#: urban_performance/templates/projects/proyecto_list.html:294
+msgid "Supported filetype:"
+msgstr "Tipo de archivo admitido:"
+
+#: urban_performance/templates/projects/proyecto_list.html:198
+#: urban_performance/templates/projects/proyecto_list.html:339
+msgid "Please fill all the fields to enable the button."
+msgstr "Complete todos los campos para habilitar el botón."
+
+#: urban_performance/templates/projects/proyecto_list.html:215
+msgid "New Project"
+msgstr "Nuevo proyecto"
+
+#: urban_performance/templates/projects/proyecto_list.html:227
+msgid "Use Template"
+msgstr "Usar plantilla"
+
+#: urban_performance/templates/projects/proyecto_list.html:230
+msgid "No project"
+msgstr "Ningún proyecto"
+
+#: urban_performance/templates/projects/proyecto_list.html:238
+msgid "Project name"
+msgstr "Nombre del proyecto"
+
+#: urban_performance/templates/projects/proyecto_list.html:327
+msgid "Please fill all the fields before continue."
+msgstr "Por favor rellene todos los campos antes de continuar."
+
+#: urban_performance/templates/projects/proyecto_list.html:335
+msgid "Previous"
+msgstr "Anterior"
+
+#: urban_performance/templates/projects/proyecto_list.html:338
+msgid "Next"
+msgstr "Siguiente"
+
+#: urban_performance/templates/projects/proyecto_list.html:352
+msgid "Project Name"
+msgstr "Nombre Proyecto"
+
+#: urban_performance/templates/projects/proyecto_list.html:353
+msgid "Last modified"
+msgstr "Última modificación"
+
+#: urban_performance/templates/projects/proyecto_list.html:354
+msgid "Public project"
+msgstr "Proyecto público"
+
+#: urban_performance/templates/projects/proyecto_list.html:355
+msgid "Options"
+msgstr "Opciones"
+
+#: urban_performance/templates/projects/proyecto_list.html:356
+msgid "Status"
+msgstr "Estatus"
+
+#: urban_performance/templates/users/preregistereduser_form.html:21
+msgid "Join to Urban Performance wait list!"
+msgstr "¡Únase a la lista de espera de Urban Performance!"
+
+#: urban_performance/templates/users/preregistereduser_form.html:23
+msgid ""
+"Sorry, our registrations are currently closed, alternatively you can enter "
+"your email address to be put on the waiting list and we will contact you."
+msgstr ""
+"Lo sentimos, nuestras inscripciones están cerradas actualmente; "
+"alternativamente, puede ingresar su dirección de correo electrónico para ser "
+"incluido en la lista de espera y nos comunicaremos con usted."
+
+#: urban_performance/templates/users/preregistereduser_form.html:32
+msgid "Pre-register"
+msgstr "Pre registro"
+
+#: urban_performance/templates/users/user_detail.html:28
+msgid "My Info"
+msgstr "Mi Info"
+
+#: urban_performance/templates/users/user_detail.html:31
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: urban_performance/templates/users/user_detail.html:34
+msgid "MFA"
+msgstr "MFA"
+
+#: urban_performance/up_geo/apps.py:9
+msgid "UP Geo"
+msgstr "UP Geo"
+
+#: urban_performance/up_geo/models.py:15
+msgid "Population Base"
+msgstr ""
+
+#: urban_performance/up_geo/models.py:16
+msgid "Base Footprint"
+msgstr "Huella urbana base"
+
+#: urban_performance/up_geo/models.py:17
+msgid "Base Transit"
+msgstr "Líneas de tránsito base"
+
+#: urban_performance/up_geo/models.py:18
+msgid "NBS"
+msgstr "SbN"
+
+#: urban_performance/up_geo/models.py:19
+msgid "Green Area"
+msgstr ""
+
+#: urban_performance/up_geo/models.py:20
+msgid "Sports"
+msgstr ""
+
+#: urban_performance/up_geo/models.py:21
+msgid "Hospitals"
+msgstr ""
+
+#: urban_performance/up_geo/models.py:22
+msgid "Schools"
+msgstr ""
+
+#: urban_performance/up_geo/models.py:23
+msgid "Clinics"
+msgstr ""
+
+#: urban_performance/up_geo/models.py:24
+msgid "Daycare"
+msgstr ""
+
+#: urban_performance/up_geo/models.py:25
+msgid "Infra Base"
+msgstr ""
+
+#: urban_performance/up_geo/models.py:26
+msgid "Jobs Base"
+msgstr ""
+
+#: urban_performance/up_geo/models.py:27
+msgid "Vegetal Cover Base"
+msgstr ""
+
+#: urban_performance/up_geo/models.py:28
+msgid "Permeable Areas Base"
+msgstr ""
+
+#: urban_performance/up_geo/models.py:29
+msgid "Roads Base"
+msgstr ""
+
+#: urban_performance/up_geo/models.py:30
+msgid "Hazard"
+msgstr "Riesgos"
+
+#: urban_performance/up_geo/models.py:33
+#, fuzzy
+#| msgid "Additional Footprints"
+msgid "Additional Population"
+msgstr "Huella urbana adicional"
+
+#: urban_performance/up_geo/models.py:34
+msgid "Additional Footprints"
+msgstr "Huella urbana adicional"
+
+#: urban_performance/up_geo/models.py:35
+msgid "Additional Transit"
+msgstr "Línea de transito adicional"
+
+#: urban_performance/up_geo/models.py:36
+#, fuzzy
+#| msgid "Additional Transit"
+msgid "Additional NBS"
+msgstr "Línea de transito adicional"
+
+#: urban_performance/up_geo/models.py:37
+#, fuzzy
+#| msgid "Additional Footprints"
+msgid "Additional Hospitals"
+msgstr "Huella urbana adicional"
+
+#: urban_performance/up_geo/models.py:38
+#, fuzzy
+#| msgid "Additional Footprints"
+msgid "Additional Schools"
+msgstr "Huella urbana adicional"
+
+#: urban_performance/up_geo/models.py:39
+#, fuzzy
+#| msgid "Additional Footprints"
+msgid "Additional Sports"
+msgstr "Huella urbana adicional"
+
+#: urban_performance/up_geo/models.py:40
+#, fuzzy
+#| msgid "Additional Transit"
+msgid "Additional Clinics"
+msgstr "Línea de transito adicional"
+
+#: urban_performance/up_geo/models.py:41
+#, fuzzy
+#| msgid "Additional Transit"
+msgid "Additional Daycare"
+msgstr "Línea de transito adicional"
+
+#: urban_performance/up_geo/models.py:42
+#, fuzzy
+#| msgid "Additional Transit"
+msgid "Additional Green Areas"
+msgstr "Línea de transito adicional"
+
+#: urban_performance/up_geo/models.py:43
+#, fuzzy
+#| msgid "Additional Transit"
+msgid "Additional Infra"
+msgstr "Línea de transito adicional"
+
+#: urban_performance/up_geo/models.py:44
+#, fuzzy
+#| msgid "Additional Transit"
+msgid "Additional Jobs"
+msgstr "Línea de transito adicional"
+
+#: urban_performance/up_geo/models.py:45
+#, fuzzy
+#| msgid "Additional Transit"
+msgid "Additional Permeable Areas"
+msgstr "Línea de transito adicional"
+
+#: urban_performance/up_geo/serializers.py:22
+msgid "File extension must be .geojson"
+msgstr ""
+
+#: urban_performance/up_geo/serializers.py:31
+msgid "The file content is not a valid GeoJSON"
+msgstr ""
+
+#: urban_performance/up_geo/serializers.py:36
+msgid "Invalid GeoJSON file"
+msgstr ""
+
+#: urban_performance/users/admin.py:26
+msgid "Personal info"
+msgstr "Información personal"
+
+#: urban_performance/users/admin.py:28
+msgid "Permissions"
+msgstr "Permisos"
+
+#: urban_performance/users/admin.py:39
+msgid "Important dates"
+msgstr "Datos importantes"
+
+#: urban_performance/users/apps.py:9
+msgid "Users"
+msgstr "Usuarios"
+
+#: urban_performance/users/forms.py:28
+#: urban_performance/users/tests/test_forms.py:35
+msgid "This email has already been taken."
+msgstr "Este correo electrónico ya ha sido tomado."
+
+#: urban_performance/users/models.py:24
+msgid "Name of User"
+msgstr "Nombre de usuario"
+
+#: urban_performance/users/models.py:27
+msgid "email address"
+msgstr "dirección de correo electrónico"
+
+#: urban_performance/users/tests/test_views.py:72
+#: urban_performance/users/views.py:39
+msgid "Information successfully updated"
+msgstr "Información actualizada exitosamente"
+
+#: urban_performance/users/views.py:72
+msgid "Please use another email."
+msgstr "Utilice otro correo electrónico."
+
+#: urban_performance/users/views.py:79
+msgid "The email is already registered and authorized to use."
+msgstr "El correo electrónico ya está registrado y autorizado para su uso."
+
+#: urban_performance/users/views.py:84
+msgid "The email is already in wait list."
+msgstr "El correo electrónico ya está en lista de espera."
+
+#: urban_performance/users/views.py:98
+#, python-format
+msgid ""
+"An email has been sent to: %(email)s, please check your inbox in order to "
+"confirm your email!"
+msgstr ""
+"¡Se ha enviado un correo electrónico a: %(email)s, por favor revisa tu "
+"bandeja de entrada para confirmar tu correo electrónico!"
+
+#: urban_performance/users/views.py:115
+msgid "The email introduced is incorrect. Please check it."
+msgstr ""
+"El correo electrónico introducido es incorrecto. Compruébelo por favor."
+
+#: urban_performance/users/views.py:131
+#, python-format
+msgid ""
+"The email %(email)s, has been validated, once an admin reviews your request "
+"you will be able to register."
+msgstr ""
+"El correo electrónico %(email)s, ha sido validado, una vez que un "
+"administrador revise tu solicitud podrás registrarte."
+
+#: urban_performance/users/views.py:137
+msgid ""
+"The token provided is not valid or expired, please try to pre-register again."
+msgstr ""
+"El token proporcionado no es válido o ha caducado. Intente preinscribirse "
+"nuevamente."
+
+#~ msgid "Here's how UP empowers cities:"
+#~ msgstr "Así es como UP potencia las ciudades:"
+
+#~ msgid "Available scenarios include:"
+#~ msgstr "Los escenarios disponibles incluyen:"
+
+#~ msgid ""
+#~ "Business As Usual (BAU): Identifies strengths, weaknesses, and "
+#~ "improvement areas without intervention."
+#~ msgstr ""
+#~ "Escenario sin políticas: Identifica fortalezas, debilidades y áreas de "
+#~ "mejora sin intervención."
+
+#~ msgid ""
+#~ "Vision Scenario: Estimates the effects of climate change measures to "
+#~ "bridge current investment and policy gaps."
+#~ msgstr ""
+#~ "Escenario Vision: Estima los efectos de las medidas de cambio climático "
+#~ "para cerrar las brechas actuales de inversión y políticas."
+
+#~ msgid ""
+#~ "My Scenario: Allows users to test and adjust custom policy combinations."
+#~ msgstr ""
+#~ "Mi escenario: Permite a los usuarios probar y ajustar combinaciones de "
+#~ "políticas personalizadas."
+
+#~ msgid ""
+#~ "UP helps cities visualize and communicate results quickly, enabling them "
+#~ "to build a brighter, more sustainable future."
+#~ msgstr ""
+#~ "UP ayuda a las ciudades a visualizar y comunicar resultados rápidamente, "
+#~ "permitiéndoles construir un futuro más brillante y más sostenible."
+
+#~ msgid "1. Base Footprint"
+#~ msgstr "1. Huella urbana base"
+
+#~ msgid "2. Base Transit"
+#~ msgstr "2. Líneas de tránsito base"
+
+#~ msgid "3. Hazards"
+#~ msgstr "3. Riesgos"
+
+#~ msgid "4. Natural Based Solutions"
+#~ msgstr "4. Soluciones basadas en la naturaleza"
+
+#~ msgid "5. Additional Footprints"
+#~ msgstr "5. Huella urbana adicional"
+
+#~ msgid "6. Additional Transit"
+#~ msgstr "6. Líneas de tránsito adicionales"
+
+#~ msgid ""
+#~ "Urban Performance, a user-friendly online tool, simplifies the creation "
+#~ "of diverse urban growth simulations. This empowers decision-makers to "
+#~ "explore the potential impacts of various policy combinations, such as "
+#~ "adjustments to infrastructure, regulations, and investments, on the "
+#~ "future of their city. By simulating these scenarios, users can also track "
+#~ "progress towards achieving sustainability goals, measured by key "
+#~ "indicators like economic growth, environmental impact, and social well-"
+#~ "being. Ultimately, Urban Performance equips decision-maker with the data "
+#~ "and analysis needed to make informed choices for their city's future."
+#~ msgstr ""
+#~ "Urban Performance, es una herramienta en línea fácil de usar, simplifica "
+#~ "la cración de diversas simulaciones de crecimiento urbano. Esto permite a "
+#~ "los responsables de la toma de decisiones explorar los impactos "
+#~ "potenciales de diversas combinaciones de políticas, como ajustes a la "
+#~ "infraestructura, las regulaciones y las inversiones, en el futuro de su "
+#~ "ciudad. Simulando estos escenarios, los usuarios también pueden realizar "
+#~ "un seguimiento del progreso hacia el logro de los objetivos de "
+#~ "sostenibilidad, medido por indicadores clave como el económico "
+#~ "crecimiento, impacto ambiental y bienestar social. En última instancia, "
+#~ "Urban Performance equipa a quienes toman decisiones con los datos y "
+#~ "análisis necesarios para tomar decisiones informadas para el futuro de su "
+#~ "ciudad."
+
+#~ msgid "Generate report"
+#~ msgstr "Generar reporte"
+
+#~ msgid "Messages"
+#~ msgstr "Mensajes"
+
+#~ msgid "Site Maps"
+#~ msgstr "Mapas del sitio"
+
+#~ msgid "Static Files"
+#~ msgstr "Archivos estáticos"
+
+#~ msgid "Syndication"
+#~ msgstr "Sindicación"
+
+#~ msgid "…"
+#~ msgstr "…"
+
+#~ msgid "That page number is not an integer"
+#~ msgstr "Ese número de página no es un número entero"
+
+#~ msgid "That page number is less than 1"
+#~ msgstr "Ese número de página es menor que 1"
+
+#~ msgid "That page contains no results"
+#~ msgstr "Esa página no contiene resultados"
+
+#~ msgid "Enter a valid value."
+#~ msgstr "Introduzca un valor válido."
+
+#~ msgid "Enter a valid URL."
+#~ msgstr "Introduzca una URL válida."
+
+#~ msgid "Enter a valid integer."
+#~ msgstr "Introduzca un número entero válido."
+
+#~ msgid "Enter a valid email address."
+#~ msgstr "Introduzca una dirección de correo electrónico válida."
+
+#~ msgid ""
+#~ "Enter a valid “slug” consisting of letters, numbers, underscores or "
+#~ "hyphens."
+#~ msgstr ""
+#~ "Ingrese un “slug” válido que consta de letras, números, guiones bajos o "
+#~ "guiones."
+
+#~ msgid ""
+#~ "Enter a valid “slug” consisting of Unicode letters, numbers, underscores, "
+#~ "or hyphens."
+#~ msgstr ""
+#~ "Ingrese un “slug” válido que consta de letras Unicode, números, guiones "
+#~ "bajos o guiones."
+
+#~ msgid "Enter a valid IPv4 address."
+#~ msgstr "Ingrese una dirección IPv4 válida."
+
+#~ msgid "Enter a valid IPv6 address."
+#~ msgstr "Ingrese una dirección IPv6 válida."
+
+#~ msgid "Enter a valid IPv4 or IPv6 address."
+#~ msgstr "Ingrese una dirección IPv4 o IPv6 válida."
+
+#~ msgid "Enter only digits separated by commas."
+#~ msgstr "Introduzca únicamente dígitos separados por comas."
+
+#, python-format
+#~ msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
+#~ msgstr "Asegúrese de que este valor se %(limit_value)s (es %(show_value)s)."
+
+#, python-format
+#~ msgid "Ensure this value is less than or equal to %(limit_value)s."
+#~ msgstr "Asegúrese de que este valor es inferior o igual a %(limit_value)s."
+
+#, python-format
+#~ msgid "Ensure this value is greater than or equal to %(limit_value)s."
+#~ msgstr "Asegúrese de que este valor es mayor o igual a %(limit_value)s."
+
+#, python-format
+#~ msgid "Ensure this value is a multiple of step size %(limit_value)s."
+#~ msgstr ""
+#~ "Asegúrese de que este valor es un múltiplo del tamaño de paso "
+#~ "%(limit_value)s."
+
+#, python-format
+#~ msgid ""
+#~ "Ensure this value is a multiple of step size %(limit_value)s, starting "
+#~ "from %(offset)s, e.g. %(offset)s, %(valid_value1)s, %(valid_value2)s, and "
+#~ "so on."
+#~ msgstr ""
+#~ "Asegúrese de que este valor sea un múltiplo del tamaño del paso "
+#~ "%(limit_value)s, comenzando por %(offset)s, p. ej. %(offset)s, "
+#~ "%(valid_value1)s, %(valid_value2)s, etcétera."
+
+#, python-format
+#~ msgid ""
+#~ "Ensure this value has at most %(limit_value)d character (it has "
+#~ "%(show_value)d)."
+#~ msgid_plural ""
+#~ "Ensure this value has at most %(limit_value)d characters (it has "
+#~ "%(show_value)d)."
+#~ msgstr[0] ""
+#~ "Asegúrese de que este valor tenga como máximo %(limit_value)d caracteres "
+#~ "(tiene %(show_value)d)."
+#~ msgstr[1] ""
+#~ "Asegúrese de que este valor tenga como máximo %(limit_value)d caracteres "
+#~ "(tiene %(show_value)d)."
+
+#~ msgid "Enter a number."
+#~ msgstr "Introduzca un número"
+
+#, python-format
+#~ msgid "Ensure that there are no more than %(max)s digit in total."
+#~ msgid_plural "Ensure that there are no more than %(max)s digits in total."
+#~ msgstr[0] "Asegúrese de que no haya más de %(max)s dígitos en total."
+#~ msgstr[1] "Asegúrese de que no haya más de %(max)s dígitos en total."
+
+#, python-format
+#~ msgid "Ensure that there are no more than %(max)s decimal place."
+#~ msgid_plural "Ensure that there are no more than %(max)s decimal places."
+#~ msgstr[0] "Asegúrese de que no haya más que %(max)s decimal."
+#~ msgstr[1] "Asegúrese de que no haya más de %(max)s decimales."
+
+#, python-format
+#~ msgid ""
+#~ "Ensure that there are no more than %(max)s digit before the decimal point."
+#~ msgid_plural ""
+#~ "Ensure that there are no more than %(max)s digits before the decimal "
+#~ "point."
+#~ msgstr[0] ""
+#~ "Asegúrese de que no haya más de %(max)s dígito antes del punto decimal."
+#~ msgstr[1] ""
+#~ "Asegúrese de que no haya más de %(max)s dígitos antes del punto decimal."
+
+#, python-format
+#~ msgid ""
+#~ "File extension “%(extension)s” is not allowed. Allowed extensions are: "
+#~ "%(allowed_extensions)s."
+#~ msgstr ""
+#~ "La extension del archivo “%(extension)s” no está permitida. Las "
+#~ "extensiones permitidas son: %(allowed_extensions)s."
+
+#~ msgid "Null characters are not allowed."
+#~ msgstr "No se permiten caracteres nulos."
+
+#~ msgid "and"
+#~ msgstr "y"
+
+#, python-format
+#~ msgid "%(model_name)s with this %(field_labels)s already exists."
+#~ msgstr "%(model_name)s con este %(field_labels)s ya existe."
+
+#, python-format
+#~ msgid "Constraint “%(name)s” is violated."
+#~ msgstr "Se infringe la restricción “%(name)s”."
+
+#, python-format
+#~ msgid "Value %(value)r is not a valid choice."
+#~ msgstr "El valor %(value)r no es una opción válida"
+
+#~ msgid "This field cannot be null."
+#~ msgstr "Este campo no puede ser nulo."
+
+#~ msgid "This field cannot be blank."
+#~ msgstr "Este campo no puede estar vacío."
+
+#, python-format
+#~ msgid "%(model_name)s with this %(field_label)s already exists."
+#~ msgstr "%(model_name)s con este %(field_label)s ya existe."
+
+#, python-format
+#~ msgid "Field of type: %(field_type)s"
+#~ msgstr "Campo de tipo: %(field_type)s"
+
+#, python-format
+#~ msgid "“%(value)s” value must be either True or False."
+#~ msgstr "El valor de “%(value)s” debe ser Verdadero o Falso."
+
+#, python-format
+#~ msgid "“%(value)s” value must be either True, False, or None."
+#~ msgstr "El valor de “%(value)s” debe ser Verdadero, Falso o Ninguno."
+
+#~ msgid "Boolean (Either True or False)"
+#~ msgstr "Booleano (Verdadero o Falso)"
+
+#~ msgid "String (unlimited)"
+#~ msgstr "Cadena de texto (ilimitado)"
+
+#~ msgid "Comma-separated integers"
+#~ msgstr "Enteros separados por comas"
+
+#~ msgid "Date (without time)"
+#~ msgstr "Fecha (sin hora)"
+
+#~ msgid "Date (with time)"
+#~ msgstr "Fecha (con hora)"
+
+#, python-format
+#~ msgid "“%(value)s” value must be a decimal number."
+#~ msgstr "El valor “%(value)s” debe ser un número decimal."
+
+#~ msgid "Decimal number"
+#~ msgstr "Número decimal"
+
+#, python-format
+#~ msgid ""
+#~ "“%(value)s” value has an invalid format. It must be in [DD] [[HH:]MM:]ss[."
+#~ "uuuuuu] format."
+#~ msgstr ""
+#~ "El valor “%(value)s” tiene un formato inválido. Debe estar en [DD] "
+#~ "[[HH:]MM:]ss[.uuuuuu]."
+
+#~ msgid "Duration"
+#~ msgstr "Duración"
+
+#~ msgid "Email address"
+#~ msgstr "Dirección de correo electrónico"
+
+#~ msgid "File path"
+#~ msgstr "Ruta de archivo"
+
+#, python-format
+#~ msgid "“%(value)s” value must be a float."
+#~ msgstr "El valor “%(value)s” debe ser flotante."
+
+#~ msgid "Floating point number"
+#~ msgstr "Número de punto flotante"
+
+#, python-format
+#~ msgid "“%(value)s” value must be an integer."
+#~ msgstr "El valor “%(value)s” debe ser entero."
+
+#~ msgid "Integer"
+#~ msgstr "Entero"
+
+#~ msgid "Big (8 byte) integer"
+#~ msgstr "Entero grande (8 bytes)"
+
+#~ msgid "Small integer"
+#~ msgstr "Entero pequeño"
+
+#~ msgid "IPv4 address"
+#~ msgstr "Dirección IPv4"
+
+#~ msgid "IP address"
+#~ msgstr "Dirección IP"
+
+#, python-format
+#~ msgid "“%(value)s” value must be either None, True or False."
+#~ msgstr "El valor de “%(value)s” debe ser Ninguno, Verdadero o Falso."
+
+#~ msgid "Boolean (Either True, False or None)"
+#~ msgstr "Booleano (Verdadero, Falso o Ninguno)"
+
+#~ msgid "Positive big integer"
+#~ msgstr "Número entero grande positivo"
+
+#~ msgid "Positive integer"
+#~ msgstr "Entero positivo"
+
+#~ msgid "Positive small integer"
+#~ msgstr "Entero pequeño positivo"
+
+#, python-format
+#~ msgid "Slug (up to %(max_length)s)"
+#~ msgstr "Slug (hasta %(max_length)s)"
+
+#~ msgid "Text"
+#~ msgstr "Texto"
+
+#, python-format
+#~ msgid ""
+#~ "“%(value)s” value has an invalid format. It must be in HH:MM[:ss[."
+#~ "uuuuuu]] format."
+#~ msgstr ""
+#~ "El valor “%(value)s” tiene un formato inválido. Debe estar en HH:MM[:ss[."
+#~ "uuuuuu]]"
+
+#, python-format
+#~ msgid ""
+#~ "“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is "
+#~ "an invalid time."
+#~ msgstr ""
+#~ "El valor “%(value)s” tiene un formato válido (HH:MM[:ss[.uuuuuu]]) sin "
+#~ "embargo, tiene una hora inválida."
+
+#~ msgid "Time"
+#~ msgstr "Hora"
+
+#~ msgid "URL"
+#~ msgstr "URL"
+
+#~ msgid "Raw binary data"
+#~ msgstr "Datos binarios sin procesar"
+
+#, python-format
+#~ msgid "“%(value)s” is not a valid UUID."
+#~ msgstr "“%(value)s” no es un UUID válido."
+
+#~ msgid "Universally unique identifier"
+#~ msgstr "Identificador único universal"
+
+#~ msgid "Image"
+#~ msgstr "Imagen"
+
+#~ msgid "A JSON object"
+#~ msgstr "Un objeto JSON"
+
+#~ msgid "Value must be valid JSON."
+#~ msgstr "El valor debe ser JSON válido."
+
+#, python-format
+#~ msgid "%(model)s instance with %(field)s %(value)r does not exist."
+#~ msgstr "La instancia de %(model)s con %(field)s %(value)r no existe."
+
+#~ msgid "Foreign Key (type determined by related field)"
+#~ msgstr "Clave externa (tipo determinado por el campo relacionado)"
+
+#~ msgid "One-to-one relationship"
+#~ msgstr "Relación uno a uno"
+
+#, python-format
+#~ msgid "%(from)s-%(to)s relationship"
+#~ msgstr "Relación %(from)s-%(to)s"
+
+#, python-format
+#~ msgid "%(from)s-%(to)s relationships"
+#~ msgstr "Relación %(from)s-%(to)s"
+
+#~ msgid "Many-to-many relationship"
+#~ msgstr "Relación muchos a muchos"
+
+#~ msgid ":?.!"
+#~ msgstr ":?.!"
+
+#~ msgid "This field is required."
+#~ msgstr "Este campo es obligatorio."
+
+#~ msgid "Enter a whole number."
+#~ msgstr "Introduzca un número entero."
+
+#~ msgid "Enter a valid date."
+#~ msgstr "Introduzca una fecha válida."
+
+#~ msgid "Enter a valid time."
+#~ msgstr "Introduzca una hora válida."
+
+#~ msgid "Enter a valid date/time."
+#~ msgstr "Introduzca una fecha/hora válida"
+
+#~ msgid "Enter a valid duration."
+#~ msgstr "Introduzca una duración válida."
+
+#, python-brace-format
+#~ msgid "The number of days must be between {min_days} and {max_days}."
+#~ msgstr "El número de días debe estar entre {min_days} y {max_days}."
+
+#~ msgid "No file was submitted. Check the encoding type on the form."
+#~ msgstr ""
+#~ "No se envió ningún archivo. Verifique el tipo de codificación en el "
+#~ "formulario."
+
+#~ msgid "No file was submitted."
+#~ msgstr "No se envió ningún archivo."
+
+#~ msgid "The submitted file is empty."
+#~ msgstr "El archivo enviado está vacío."
+
+#, python-format
+#~ msgid ""
+#~ "Ensure this filename has at most %(max)d character (it has %(length)d)."
+#~ msgid_plural ""
+#~ "Ensure this filename has at most %(max)d characters (it has %(length)d)."
+#~ msgstr[0] ""
+#~ "Asegúrese de que este nombre de archivo tenga como máximo %(max)d "
+#~ "caractéres (tiene %(length)d)."
+#~ msgstr[1] ""
+#~ "Asegúrese de que este nombre de archivo tenga como máximo %(max)d "
+#~ "caractéres (tiene %(length)d)."
+
+#~ msgid "Please either submit a file or check the clear checkbox, not both."
+#~ msgstr ""
+#~ "Envíe un archivo o marque la casilla de verificación para limpiar el "
+#~ "formulario, no ambas."
+
+#~ msgid ""
+#~ "Upload a valid image. The file you uploaded was either not an image or a "
+#~ "corrupted image."
+#~ msgstr ""
+#~ "Sube una imagen válida. El archivo que has subido no es una imagen o es "
+#~ "una imagen dañada."
+
+#~ msgid "Enter a list of values."
+#~ msgstr "Introduzca una lista de valores."
+
+#~ msgid "Enter a complete value."
+#~ msgstr "Introduzca un valor completo."
+
+#~ msgid "Enter a valid UUID."
+#~ msgstr "Introduzca un UUID válido."
+
+#~ msgid "Enter a valid JSON."
+#~ msgstr "Introduzca un JSON válido"
+
+#~ msgid ":"
+#~ msgstr ":"
+
+#, python-format
+#~ msgid "(Hidden field %(name)s) %(error)s"
+#~ msgstr "(Campo oculto %(name)s) %(error)s"
+
+#, python-format
+#~ msgid ""
+#~ "ManagementForm data is missing or has been tampered with. Missing fields: "
+#~ "%(field_names)s. You may need to file a bug report if the issue persists."
+#~ msgstr ""
+#~ "Faltan datos de ManagementForm o han sido alterados. Campos faltantes: "
+#~ "%(field_names)s. Es posible que tengas que presentar un informe de error "
+#~ "si el problema persiste."
+
+#, python-format
+#~ msgid "Please submit at most %(num)d form."
+#~ msgid_plural "Please submit at most %(num)d forms."
+#~ msgstr[0] "Por favor envíe como máximo %(num)d formulario."
+#~ msgstr[1] "Por favor envíe como máximo %(num)d formularios."
+
+#, python-format
+#~ msgid "Please submit at least %(num)d form."
+#~ msgid_plural "Please submit at least %(num)d forms."
+#~ msgstr[0] "Por favor envíe al menos %(num)d formulario."
+#~ msgstr[1] "Por favor envíe al menos %(num)d formularios."
+
+#~ msgid "Order"
+#~ msgstr "Ordenar"
+
+#, python-format
+#~ msgid "Please correct the duplicate data for %(field)s."
+#~ msgstr "Por favor corrija los datos duplicados para %(field)s."
+
+#, python-format
+#~ msgid ""
+#~ "Please correct the duplicate data for %(field)s, which must be unique."
+#~ msgstr ""
+#~ "Por favor corrija los datos duplicados para %(field)s, que deben ser "
+#~ "únicos."
+
+#, python-format
+#~ msgid ""
+#~ "Please correct the duplicate data for %(field_name)s which must be unique "
+#~ "for the %(lookup)s in %(date_field)s."
+#~ msgstr ""
+#~ "Por favor corrija los datos duplicados para %(field_name)s que deben ser "
+#~ "únicos para %(lookup)s en %(date_field)s."
+
+#~ msgid "Please correct the duplicate values below."
+#~ msgstr "Por favor, corrija los valores duplicados a continuación."
+
+#~ msgid "The inline value did not match the parent instance."
+#~ msgstr "El valor en línea no coincide con la instancia principal."
+
+#~ msgid ""
+#~ "Select a valid choice. That choice is not one of the available choices."
+#~ msgstr ""
+#~ "Seleccione una opción válida. Esa elección no es una de las opciones "
+#~ "disponibles."
+
+#, python-format
+#~ msgid "“%(pk)s” is not a valid value."
+#~ msgstr "“%(pk)s” no es un valor válido."
+
+#, python-format
+#~ msgid ""
+#~ "%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; "
+#~ "it may be ambiguous or it may not exist."
+#~ msgstr ""
+#~ "La %(datetime)s no se pudo interpretar en la zona horaria "
+#~ "%(current_timezone)s; puede ser ambiguo o puede no existir."
+
+#~ msgid "Clear"
+#~ msgstr "Limpiar"
+
+#~ msgid "Currently"
+#~ msgstr "Actualmente"
+
+#~ msgid "Change"
+#~ msgstr "Cambiar"
+
+#~ msgid "Unknown"
+#~ msgstr "Desconocido"
+
+#~ msgid "Yes"
+#~ msgstr "Sí"
+
+#~ msgid "No"
+#~ msgstr "No"
+
+#~ msgid "yes,no,maybe"
+#~ msgstr "sí,no,talvez"
+
+#, python-format
+#~ msgid "%(size)d byte"
+#~ msgid_plural "%(size)d bytes"
+#~ msgstr[0] "%(size)d byte"
+#~ msgstr[1] "%(size)d bytes"
+
+#, python-format
+#~ msgid "%s KB"
+#~ msgstr "%s KB"
+
+#, python-format
+#~ msgid "%s MB"
+#~ msgstr "%s MB"
+
+#, python-format
+#~ msgid "%s GB"
+#~ msgstr "%s GB"
+
+#, python-format
+#~ msgid "%s TB"
+#~ msgstr "%s TB"
+
+#, python-format
+#~ msgid "%s PB"
+#~ msgstr "%s PB"
+
+#~ msgid "p.m."
+#~ msgstr "p.m."
+
+#~ msgid "a.m."
+#~ msgstr "a.m."
+
+#~ msgid "PM"
+#~ msgstr "PM"
+
+#~ msgid "AM"
+#~ msgstr "AM"
+
+#~ msgid "midnight"
+#~ msgstr "medianoche"
+
+#~ msgid "noon"
+#~ msgstr "mediodía"
+
+#~ msgid "Monday"
+#~ msgstr "Lunes"
+
+#~ msgid "Tuesday"
+#~ msgstr "Martes"
+
+#~ msgid "Wednesday"
+#~ msgstr "Miércoles"
+
+#~ msgid "Thursday"
+#~ msgstr "Jueves"
+
+#~ msgid "Friday"
+#~ msgstr "Viernes"
+
+#~ msgid "Saturday"
+#~ msgstr "Sábado"
+
+#~ msgid "Sunday"
+#~ msgstr "Domingo"
+
+#~ msgid "Mon"
+#~ msgstr "Lun"
+
+#~ msgid "Tue"
+#~ msgstr "Mar"
+
+#~ msgid "Wed"
+#~ msgstr "Mie"
+
+#~ msgid "Thu"
+#~ msgstr "Jue"
+
+#~ msgid "Fri"
+#~ msgstr "Vie"
+
+#~ msgid "Sat"
+#~ msgstr "Sab"
+
+#~ msgid "Sun"
+#~ msgstr "Dom"
+
+#~ msgid "January"
+#~ msgstr "Enero"
+
+#~ msgid "February"
+#~ msgstr "Febrero"
+
+#~ msgid "March"
+#~ msgstr "Marzo"
+
+#~ msgid "April"
+#~ msgstr "Abril"
+
+#~ msgid "May"
+#~ msgstr "Mayo"
+
+#~ msgid "June"
+#~ msgstr "Junio"
+
+#~ msgid "July"
+#~ msgstr "Julio"
+
+#~ msgid "August"
+#~ msgstr "Agosto"
+
+#~ msgid "September"
+#~ msgstr "Septiembre"
+
+#~ msgid "October"
+#~ msgstr "Octubre"
+
+#~ msgid "November"
+#~ msgstr "Noviembre"
+
+#~ msgid "December"
+#~ msgstr "Diciembre"
+
+#~ msgid "jan"
+#~ msgstr "ene"
+
+#~ msgid "feb"
+#~ msgstr "feb"
+
+#~ msgid "mar"
+#~ msgstr "mar"
+
+#~ msgid "apr"
+#~ msgstr "abr"
+
+#~ msgid "may"
+#~ msgstr "may"
+
+#~ msgid "jun"
+#~ msgstr "jun"
+
+#~ msgid "jul"
+#~ msgstr "jul"
+
+#~ msgid "aug"
+#~ msgstr "ago"
+
+#~ msgid "sep"
+#~ msgstr "sep"
+
+#~ msgid "oct"
+#~ msgstr "oct"
+
+#~ msgid "nov"
+#~ msgstr "nov"
+
+#~ msgid "dec"
+#~ msgstr "dic"
+
+#~ msgctxt "abbrev. month"
+#~ msgid "Jan."
+#~ msgstr "Ene."
+
+#~ msgctxt "abbrev. month"
+#~ msgid "Feb."
+#~ msgstr "Feb."
+
+#~ msgctxt "abbrev. month"
+#~ msgid "March"
+#~ msgstr "Marzo"
+
+#~ msgctxt "abbrev. month"
+#~ msgid "April"
+#~ msgstr "Abril"
+
+#~ msgctxt "abbrev. month"
+#~ msgid "May"
+#~ msgstr "Mayo"
+
+#~ msgctxt "abbrev. month"
+#~ msgid "June"
+#~ msgstr "Junio"
+
+#~ msgctxt "abbrev. month"
+#~ msgid "July"
+#~ msgstr "Julio"
+
+#~ msgctxt "abbrev. month"
+#~ msgid "Aug."
+#~ msgstr "Ago."
+
+#~ msgctxt "abbrev. month"
+#~ msgid "Sept."
+#~ msgstr "Sep."
+
+#~ msgctxt "abbrev. month"
+#~ msgid "Oct."
+#~ msgstr "Oct."
+
+#~ msgctxt "abbrev. month"
+#~ msgid "Nov."
+#~ msgstr "Nov."
+
+#~ msgctxt "abbrev. month"
+#~ msgid "Dec."
+#~ msgstr "Dic."
+
+#~ msgctxt "alt. month"
+#~ msgid "January"
+#~ msgstr "Enero"
+
+#~ msgctxt "alt. month"
+#~ msgid "February"
+#~ msgstr "Febrero"
+
+#~ msgctxt "alt. month"
+#~ msgid "March"
+#~ msgstr "Marzo"
+
+#~ msgctxt "alt. month"
+#~ msgid "April"
+#~ msgstr "Abril"
+
+#~ msgctxt "alt. month"
+#~ msgid "May"
+#~ msgstr "Mayo"
+
+#~ msgctxt "alt. month"
+#~ msgid "June"
+#~ msgstr "Junio"
+
+#~ msgctxt "alt. month"
+#~ msgid "July"
+#~ msgstr "Julio"
+
+#~ msgctxt "alt. month"
+#~ msgid "August"
+#~ msgstr "Agosto"
+
+#~ msgctxt "alt. month"
+#~ msgid "September"
+#~ msgstr "Septiembre"
+
+#~ msgctxt "alt. month"
+#~ msgid "October"
+#~ msgstr "Octubre"
+
+#~ msgctxt "alt. month"
+#~ msgid "November"
+#~ msgstr "Noviembre"
+
+#~ msgctxt "alt. month"
+#~ msgid "December"
+#~ msgstr "Diciembre"
+
+#~ msgid "This is not a valid IPv6 address."
+#~ msgstr "Esta no es una dirección IPv6 válida."
+
+#, python-format
+#~ msgctxt "String to return when truncating text"
+#~ msgid "%(truncated_text)s…"
+#~ msgstr "%(truncated_text)s…"
+
+#~ msgid "or"
+#~ msgstr "o"
+
+#~ msgid ", "
+#~ msgstr ", "
+
+#, python-format
+#~ msgid "%(num)d year"
+#~ msgid_plural "%(num)d years"
+#~ msgstr[0] "%(num)d año"
+#~ msgstr[1] "%(num)d años"
+
+#, python-format
+#~ msgid "%(num)d month"
+#~ msgid_plural "%(num)d months"
+#~ msgstr[0] "%(num)d mes"
+#~ msgstr[1] "%(num)d meses"
+
+#, python-format
+#~ msgid "%(num)d week"
+#~ msgid_plural "%(num)d weeks"
+#~ msgstr[0] "%(num)d semana"
+#~ msgstr[1] "%(num)d semanas"
+
+#, python-format
+#~ msgid "%(num)d day"
+#~ msgid_plural "%(num)d days"
+#~ msgstr[0] "%(num)d día"
+#~ msgstr[1] "%(num)d días"
+
+#, python-format
+#~ msgid "%(num)d hour"
+#~ msgid_plural "%(num)d hours"
+#~ msgstr[0] "%(num)d hora"
+#~ msgstr[1] "%(num)d horas"
+
+#, python-format
+#~ msgid "%(num)d minute"
+#~ msgid_plural "%(num)d minutes"
+#~ msgstr[0] "%(num)d minuto"
+#~ msgstr[1] "%(num)d minutos"
+
+#~ msgid "Forbidden"
+#~ msgstr "Prohibido"
+
+#~ msgid "CSRF verification failed. Request aborted."
+#~ msgstr "La verificación CSRF falló. Solicitud abortada."
+
+#~ msgid ""
+#~ "You are seeing this message because this site requires a CSRF cookie when "
+#~ "submitting forms. This cookie is required for security reasons, to ensure "
+#~ "that your browser is not being hijacked by third parties."
+#~ msgstr ""
+#~ "Estás viendo este mensaje porque este sitio requiere una cookie CSRF al "
+#~ "enviar formularios. Esta cookie es necesaria por motivos de seguridad, "
+#~ "para garantizar que su navegador no sea secuestrado por terceros."
+
+#~ msgid ""
+#~ "If you have configured your browser to disable cookies, please re-enable "
+#~ "them, at least for this site, or for “same-origin” requests."
+#~ msgstr ""
+#~ "Si ha configurado su navegador para desactivar las cookies, vuelva a "
+#~ "activarlas, al menos para este sitio, o para las solicitudes de “mismo "
+#~ "origen”."
+
+#~ msgid "More information is available with DEBUG=True."
+#~ msgstr "Hay más información disponible con DEBUG=True."
+
+#~ msgid "No year specified"
+#~ msgstr "Ningún año especificado"
+
+#~ msgid "Date out of range"
+#~ msgstr "Fecha fuera de rango"
+
+#~ msgid "No month specified"
+#~ msgstr "Ningún mes especificado"
+
+#~ msgid "No day specified"
+#~ msgstr "Ningún día especificado"
+
+#~ msgid "No week specified"
+#~ msgstr "Ninguna semana especificada"
+
+#, python-format
+#~ msgid "No %(verbose_name_plural)s available"
+#~ msgstr "Ningún %(verbose_name_plural)s disponible"
+
+#, python-format
+#~ msgid "Invalid date string “%(datestr)s” given format “%(format)s”"
+#~ msgstr "Cadena de fecha inválido “%(datestr)s” formato dado “%(format)s”"
+
+#, python-format
+#~ msgid "No %(verbose_name)s found matching the query"
+#~ msgstr "No se encontraron %(verbose_name)s que coincida con la consulta"
+
+#~ msgid "Page is not “last”, nor can it be converted to an int."
+#~ msgstr "La página no es la “última”, ni se puede convertir a entero."
+
+#, python-format
+#~ msgid "Invalid page (%(page_number)s): %(message)s"
+#~ msgstr "Página inválida (%(page_number)s): %(message)s"
+
+#, python-format
+#~ msgid "Empty list and “%(class_name)s.allow_empty” is False."
+#~ msgstr "Lista vacía y “%(class_name)s.allow_empty” es Falso."
+
+#~ msgid "Directory indexes are not allowed here."
+#~ msgstr "Los índices de directorios no están permitidos aquí."
+
+#, python-format
+#~ msgid "“%(path)s” does not exist"
+#~ msgstr "“%(path)s” no existe"
+
+#, python-format
+#~ msgid "Index of %(directory)s"
+#~ msgstr "Índice de %(directory)s"
+
+#~ msgid "The install worked successfully! Congratulations!"
+#~ msgstr "¡La instalación ha funcionado correctamente!. ¡Enhorabuena!."
+
+#~ msgid "Django Documentation"
+#~ msgstr "Documentación de Django"
+
+#~ msgid "Get started with Django"
+#~ msgstr "Empieza con Django"
+
+#~ msgid "Django Community"
+#~ msgstr "Comunidad Django"

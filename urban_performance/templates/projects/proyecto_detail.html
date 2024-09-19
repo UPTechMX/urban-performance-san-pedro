@@ -1,0 +1,1487 @@
+{% extends 'base.html' %}
+{% load static i18n color %}
+{% block inline_css %}
+<link href="{% static 'css/dragula.min.css' %}" rel="stylesheet" />
+<style>
+    .chart {
+      width: 100%;
+      height: 500px;
+    }
+    </style>
+{% endblock inline_css %}
+{% block content %}
+<div class="px-3 py-1 d-none" id="project-processed">
+    <div class="alert alert-success">
+        The project has been processed, please reload <button class="btn btn-sm btn-success" onclick="window.location.reload()">here.</button>
+    </div>
+</div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="escenariosToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">Urban Performance</strong>
+            <small>{% translate "Now" %}</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            {% translate "Scenarios Saved!" %}
+        </div>
+    </div>
+</div>
+<div class="p-4 bg-2">
+    <div class="w-100 d-none" id="trigger-collapse-titulos"></div>
+    <label class="d-print-none roboto-bold" for="cambiar-proyecto">{% translate "Select city" %}</label>
+    <select name="cambiar-proyecto" id="cambiar-proyecto"
+        class="form-select form-select-sm personalized-select w-25 bg-select roboto-bold">
+        {% for proyecto in object_list %}
+        <option value="{{ proyecto.uuid }}" {% if proyecto.pk == obj_pk %}selected{% endif %}>{{ proyecto.ciudad }}
+        </option>
+        {% endfor %}
+    </select>
+</div>
+<div class="modal modal-xl fade" id="projectScenarios" tabindex="-1" aria-labelledby="newProjectModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-1">
+            <div class="modal-body">
+                <div class="title-container text-center w-100">
+                    <h3 class="roboto-header-medium">
+                        {% translate "Edit Scenarios" %}
+                    </h3>
+                    <p>{% blocktranslate %}Modify the description of each scenario{% endblocktranslate %}</p>
+                </div>
+                <div class="d-flex">
+                    <button class="btn bg-1 float-end borders-vision" id="add-escenario">{% translate "Add scenario +" %}</button>
+                </div>
+                <div class="row" id="escenarios-container">
+                    {% for escenario in object.escenario_set.all %}
+                    <div class="col-12 p-1">
+                        <div class="card p-2 my-1 bg-transparent escenario-edit">
+                            <table class="table">
+                                <tr class="bg-dark text-light">
+                                    <td colspan="2">
+                                        {% translate "Scenario" %}<span class="posicion-escenario">{{ forloop.counter }}</span>
+                                        <input type="text" class="d-none escenario-pk" value="{{ escenario.pk }}">
+                                        <button role="button" class="delete-scenario-btn btn bg-1 mx-2 float-end">
+                                            <img width="12px" src="{% static 'images/bin.png' %}">
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="bg-table">
+                                    <th>{% translate "Name" %}</th>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm nombre-escenario bg-1"
+                                            value="{{ escenario.nombre }}">
+                                    </td>
+                                </tr>
+                                <tr class="bg-table">
+                                    <th>{% translate "Description" %}</th>
+                                    <td>
+                                        <textarea class="form-control form-control-sm descripcion-escenario bg-1" id=""
+                                            cols="30" rows="5">{{ escenario.descripcion }}</textarea>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button type="button" class="btn mx-3 w-100 btn-custom borders-secondary"
+                            data-bs-dismiss="modal">{% translate "Cancel" %}</button>
+                    <button class="btn w-100 btn-custom mx-3 borders-secondary" id="save-project-scenarios">{% translate "Save" %}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row sticky-top bg-1 collapse" id="escenarios-titulos">
+    <div class="col-3"></div>
+    {% for escenario_id, escenario in escenarios.items %}
+    <div class="col-3 text-center">
+        <p class="mt-2">
+            <b>{{ escenario.nombre }}</b>
+        </p>
+    </div>
+    {% endfor %}
+</div>
+<div class="p-4 shadow-sm collapse show" id="escenarios-descripcion">
+    <div class="row bg-1">
+        <div class="col-3 p-3 custom-border">
+            <p>
+                <b>{% translate "Scenarios" %}</b>
+            </p>
+            <button data-bs-target="#projectScenarios" data-bs-dismiss="modal" data-bs-toggle="modal"
+                class="btn btn-custom w-100 borders-secondary d-print-none"
+                {% if not request.user.is_authenticated or not request.user.pk == object.creado_por.pk %}
+                disabled
+                {% endif %}
+            >{% translate "Edit scenarios" %}</button>
+            <div class="w-100" id="trigger-show-titulos"></div>
+        </div>
+        {% for escenario_id, escenario in escenarios.items %}
+        <div data-scenario="{{ escenario_id }}"
+            class="escenario col-3 p-3 {% if not forloop.last %}custom-border{% endif %}">
+            <p>
+                <b>{{ escenario.nombre }}</b>
+            </p>
+            <p>{{ escenario.descripcion }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="p-3 bg-light mt-1">
+    <div class="accordion" id="accordionPanelsStayOpenExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header"><button class="accordion-button bg-2 text-dark" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
+                    aria-controls="panelsStayOpen-collapseOne"><b>{% translate "Policy levers" %}</b></button></h2>
+            <div id="panelsStayOpen-collapseOne" class="accordion-collapse show">
+                <div class="accordion-body">
+                    <div class="modal modal-xl fade" id="assumptionsModal" tabindex="-1"
+                        aria-labelledby="assumptionsModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form id="assumptions-form">
+                                    <div class="modal-body">
+                                        <div class="text-center">
+                                            <h3 class="roboto-header-medium my-3">{% translate "Assumptions set up" %}</h3>
+                                            {% blocktranslate %}Modify the following table to update the assumptions.{% endblocktranslate %} <br>
+                                            {% translate "Go back to" %}<a class="color-secondary roboto-medium"
+                                                href="{% url 'about' %}">“{% translate "About" %} Urban Performance”</a> {% blocktranslate %}for further information regarding columns in the table.{% endblocktranslate %}
+                                        </div>
+                                        <br><br>
+                                            <table id="assumptions-table" class="table table-hover my-3">
+                                                <thead class="text-center">
+                                                    <tr class="bg-dark text-light">
+                                                        {% for header in assumptions|first %}
+                                                        <th>{{ header|title }}</th>
+                                                        {% endfor %}
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="bg-table">
+                                                    {% for assumption_row in assumptions %}
+                                                    <tr>
+                                                        {% for key, value in assumption_row.items %}
+                                                        <td>
+                                                            {% if key == "value" %}
+                                                            <input class="form-control" type="number" value="{{ value }}"
+                                                                min="0.001" step="0.001">
+                                                            {% elif key == "reference" %}
+                                                            <textarea class="form-control" rows="3">{{ value }}</textarea>
+                                                            {% else %}
+                                                            {{ value }}
+                                                            {% endif %}
+                                                        </td>
+                                                        {% endfor %}
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        
+                                        <div class="d-flex justify-content-center">
+                                            <button type="button" class="btn mx-3 w-100 btn-custom borders-secondary"
+                                                    data-bs-dismiss="modal">{% translate "Cancel" %}</button>
+                                            <button type="submit" class="btn mx-3 w-100 btn-custom borders-secondary"
+                                                    id="save-assumptions">{% translate "Save" %}</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-2">
+                        <button class="btn btn-custom borders-secondary text-center d-print-none" data-bs-toggle="modal"
+                            data-bs-target="#assumptionsModal"
+                            {% if not request.user.is_authenticated or not request.user.pk == object.creado_por.pk %}
+                            disabled
+                            {% endif %}
+                        >{% translate "Assumptions set up" %}</button>
+                        <button class="btn btn-custom borders-secondary text-center d-print-none ms-5"
+                            id="save-escenarios"
+                            {% if not request.user.is_authenticated or not request.user.pk == object.creado_por.pk %}
+                            disabled
+                            {% endif %}
+                        >{% translate "Save" %} 💾</button>
+                    </div>
+                    {% for control_id, control in controles.items %}
+                    <div class="row {% if not forloop.last %}custom-dashed-border{% endif %} py-3">
+                        <div class="col-3">
+                            <img width="15px" src="{% static 'images/info.png' %}" alt="" class="mx-2"
+                                data-bs-toggle="tooltip" data-bs-title="{{ control.descripcion }}">
+                            {{ control.nombre }}
+                        </div>
+                        {% for escenario_id, escenario in escenarios.items %}
+                        {% if control.tipo == "LY" or control.tipo == "SLY" %}
+                        <div class="col-3">
+                            <select class="form-select-sm w-100 trigger borders-{{ forloop.counter0|color }} layer"
+                                data-scenario="{{ escenario_id }}" data-target-indicator="{{ control_id }}">
+                                {% for opt_id, opt in control.opciones.items %}
+                                <option value="{{ opt_id }}">{{ opt.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {% elif control.tipo == "SW" %}
+                        <div class="col-3">
+                            <div class="form-check form-switch">
+                                <label class="form-check-label">{{ control.nombre }}</label>
+                                <input
+                                    class="form-check-input layer-sw trigger color-{{ forloop.counter0|color }} switch-control"
+                                    type="checkbox" role="switch" data-scenario="{{ escenario_id }}"
+                                    data-target-indicator="{{ control_id }}" data-target-layer="NB" checked />
+                            </div>
+                        </div>
+                        {% elif control.tipo == "RG" %}
+                        <div class="col-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <input type="range" class="form-range color-{{ forloop.counter0|color }} trigger"
+                                        min="0" max="{{ control.opciones|length|add:'-1' }}"
+                                        data-scenario="{{ escenario_id }}" data-target-indicator="{{ control_id }}" />
+                                </div>
+                                <div class="col-2 range-value-holder"
+                                    data-scenario="{{ escenario_id }}" data-target-indicator="{{ control_id }}"
+                                >{{ control.opciones|last }}%</div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header"><button class="accordion-button bg-2 text-dark" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true"
+                    aria-controls="panelsStayOpen-collapseTwo"><b>{% translate "Maps" %}</b></button></h2>
+            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse show">
+                <div class="accordion-body">
+                    <div class="row">
+                        <div class="col-3 p-4">
+                            {% for control_id, control in controles.items %}
+
+                            {% if control.tipo == "LY" or control.tipo == "SLY" %}
+                            {% if control.active %}
+                            <label for="">Opacidad de {{ control.nombre }}</label><br>
+
+                            <input type="range" class="layer-opc form-range color-opc-{{ control_id }}" min="0"
+                                max="1" step="0.01" value="0.5" data-target-indicator="{{ control_id }}">
+                            {% endif %}
+                            {% endif %}
+                            {% endfor %}
+                            {% for base_map_element_id, base_map_element in base_map_elements.items %}
+                            <label for="">Opacidad de {{ base_map_element.nombre }}</label><br>
+
+                            <input type="range" class="layer-opc form-range color-{{ base_map_element_id }}" min="0"
+                                max="1" step="0.01" value="0.5" data-target-indicator="{{ base_map_element_id }}">
+                            {% endfor %}
+                            <div id="legend" class="legend-horizontal"></div>
+                        </div>
+                        {% for escenario in escenarios %}
+                        <div class="col-3 p-4">
+                            <div class="map" id="map{{ escenario }}"></div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item mt-1">
+            <h2 class="accordion-header"><button class="accordion-button bg-2 text-dark" type="button"
+                data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="true"
+                aria-controls="panelsStayOpen-collapseThree"><b>{% translate "Indicators" %}</b></button></h2>
+            <div id="panelsStayOpen-collapseThree" class="accordion-collapse show p-3">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    {% for categoria in categorias %}
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link {% if forloop.first %}active{% endif %}" id="home-tab" data-bs-toggle="tab" data-bs-target="#tab-{{ forloop.counter0 }}" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">
+                            {{ categoria.nombre }}
+                        </button>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <div class="tab-content mt-3" id="myTabContent">
+                    {% for categoria in categorias %}
+                    <div class="tab-pane fade show {% if forloop.first %}active{% endif %}" id="tab-{{ forloop.counter0 }}" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+                        {% if categoria.chart.enabled %}
+                        <div id="{{ categoria.id }}-chart" class="chart chart-target"></div>
+                        {% endif %}
+                        {% for indicador_id, indicador in indicadores.items %}
+                        {% if indicador.campo in categoria.llaves %}
+                        <div class="row {% if not forloop.last %}custom-dashed-border{% endif %}">
+                            <div class="col-3 px-3 py-2">
+                                <img width="15px" src="{% static 'images/info.png' %}" alt="" class="mx-2"
+                                    data-bs-toggle="tooltip" data-bs-title="{{ indicador.descripcion }}">
+                                {{ indicador.nombre }} ({{ indicador.unidad }})
+                            </div>
+                            {% for escenario_id, escenario in escenarios.items %}
+                            <div class="col-3 p-3">
+                                <div class="indicador-cont row" data-scenario="{{ escenario_id }}"
+                                    data-indicator="con-{{ indicador_id }}">
+                                    <div class="col-8">
+                                        <div class="progress" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                                            aria-valuemax="100">
+                                            <div class="progress-bar bg-{{ forloop.counter0|color }}" style="width: 0%">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="col-4 tag color-{{ forloop.counter0|color }}"></span>
+                                </div>
+                                <br />
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block inline_javascript %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+{{ controles|json_script:'controles' }}
+{{ indicadores|json_script:'indicadores' }}
+<!-- {{ controles_e_indicadores|json_script:'ci' }} -->
+{{ escenarios|json_script:'escenarios' }}
+{{ base_map_elements|json_script:'base_map_elements' }}
+{{ categorias|json_script:'categorias' }}
+<script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.js'></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="{% static 'js/L.Map.Sync.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/danfojs@1.1.2/lib/bundle.min.js"></script>
+<!-- Resources -->
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/radar.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+<!-- Chart code -->
+<script>
+    var built_charts = {};
+    function build_radar(data, target, _) {
+        am5.ready(function () {
+
+            // Create root element
+            // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+            var root = am5.Root.new(`${target}-chart`);
+
+
+            // Set themes
+            // https://www.amcharts.com/docs/v5/concepts/themes/
+            root.setThemes([
+                am5themes_Animated.new(root)
+            ]);
+
+
+            // Create chart
+            // https://www.amcharts.com/docs/v5/charts/radar-chart/
+            var chart = root.container.children.push(am5radar.RadarChart.new(root, {
+                panX: false,
+                panY: false,
+                // wheelX: "panX",
+                // wheelY: "zoomX"
+            }));
+            built_charts[target] = chart;
+
+            // Add cursor
+            // https://www.amcharts.com/docs/v5/charts/radar-chart/#Cursor
+            var cursor = chart.set("cursor", am5radar.RadarCursor.new(root, {
+                behavior: "zoomX"
+            }));
+
+            cursor.lineY.set("visible", false);
+
+
+            // Create axes and their renderers
+            // https://www.amcharts.com/docs/v5/charts/radar-chart/#Adding_axes
+            var xRenderer = am5radar.AxisRendererCircular.new(root, {});
+            xRenderer.labels.template.setAll({
+                radius: 10
+            });
+            var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+                maxDeviation: 0,
+                categoryField: "category",
+                renderer: xRenderer,
+            }));
+
+
+            xAxis.data.setAll(data);
+
+            var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+                renderer: am5radar.AxisRendererRadial.new(root, {})
+            }));
+
+
+            var seriesColors = ["#94abbc", "#d13b66", "#8db736"];
+            for (var i = 1; i <= 3; i++) {
+                var series = chart.series.push(
+                    am5radar.RadarLineSeries.new(root, {
+                        name: "Escenario " + i,
+                        xAxis: xAxis,
+                        yAxis: yAxis,
+                        valueYField: "value" + i,
+                        categoryXField: "category",
+                        fill: am5.color(seriesColors[i - 1]),
+                        stroke: am5.color(seriesColors[i - 1]),
+                        tooltip: am5.Tooltip.new(root, {
+                            labelText: "{valueY}%"
+                        })
+                    })
+                );
+                series.strokes.template.setAll({
+                    strokeWidth: 2
+                });
+
+                series.bullets.push(function () {
+                    return am5.Bullet.new(root, {
+                        sprite: am5.Circle.new(root, {
+                            radius: 2,
+                            fill: am5.color("#000"),
+                        })
+                    });
+                });
+
+                series.data.setAll(data);
+
+                series.appear(1000);
+            }
+            xAxis.data.setAll(data);
+
+            chart.appear(1000, 10);
+
+        });
+    }
+    function update_flower_radar_bar(data, target, _) {
+        var chart = built_charts[target];
+
+        chart.series.each(function(series) {
+            series.data.setAll(data);
+        });
+    }
+</script>
+<script>
+    function build_flower(data, target, _) {
+        am5.ready(function () {
+
+        // Create root element
+        // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+        var root = am5.Root.new(`${target}-chart`);
+
+        // Set themes
+        // https://www.amcharts.com/docs/v5/concepts/themes/
+        root.setThemes([
+            am5themes_Animated.new(root)
+        ]);
+
+        // Create chart
+        // https://www.amcharts.com/docs/v5/charts/radar-chart/
+        var chart = root.container.children.push(
+            am5radar.RadarChart.new(root, {
+                panX: false,
+                panY: false,
+                // wheelX: "panX",
+                // wheelY: "zoomX"
+            })
+        );
+        built_charts[target] = chart;
+
+        // Add cursor
+        // https://www.amcharts.com/docs/v5/charts/radar-chart/#Cursor
+        var cursor = chart.set("cursor", am5radar.RadarCursor.new(root, {
+            behavior: "zoomX"
+        }));
+
+        cursor.lineY.set("visible", false);
+
+        // Create axes and their renderers
+        // https://www.amcharts.com/docs/v5/charts/radar-chart/#Adding_axes
+        var xRenderer = am5radar.AxisRendererCircular.new(root, {
+            cellStartLocation: 0.2,
+            cellEndLocation: 0.8
+        });
+
+        xRenderer.labels.template.setAll({
+            radius: 10
+        });
+
+        var xAxis = chart.xAxes.push(
+            am5xy.CategoryAxis.new(root, {
+                maxDeviation: 0,
+                categoryField: "category",
+                renderer: xRenderer,
+            })
+        );
+
+        xAxis.data.setAll(data);
+
+        var yAxis = chart.yAxes.push(
+            am5xy.ValueAxis.new(root, {
+                renderer: am5radar.AxisRendererRadial.new(root, {})
+            })
+        );
+
+        // Create series
+        // https://www.amcharts.com/docs/v5/charts/radar-chart/#Adding_series
+        var seriesColors = ["#94abbc", "#d13b66", "#8db736"];
+        for (var i = 1; i <= 3; i++) {
+            var series = chart.series.push(
+                am5radar.RadarColumnSeries.new(root, {
+                    name: "Escenario " + i,
+                    xAxis: xAxis,
+                    yAxis: yAxis,
+                    valueYField: "value" + i,
+                    categoryXField: "category"
+                })
+            );
+
+            series.columns.template.setAll({
+                tooltipText: "{name}: {valueY}%",
+                width: am5.percent(100),
+                fill: am5.color(seriesColors[i-1]),
+                stroke: am5.color(seriesColors[i-1])
+            });
+
+            series.data.setAll(data);
+
+            series.appear(1000);
+        }
+
+        // Animate chart
+        // https://www.amcharts.com/docs/v5/concepts/animations/#Initial_animation
+        chart.appear(1000, 100);
+
+        });
+    }
+</script>
+<script>
+    function build_bar(data, target, campos) {
+        am5.ready(function() {
+
+            // Create root element
+            var root = am5.Root.new(`${target}-chart`);
+
+            // Set themes
+            root.setThemes([
+                am5themes_Animated.new(root)
+            ]);
+
+            // Create chart
+            var chart = root.container.children.push(am5xy.XYChart.new(root, {
+                panX: true,
+                panY: false,
+                // wheelX: "panX",
+                // wheelY: "none"
+            }));
+            built_charts[target] = chart;
+
+            // Create axes
+            var yAxis = chart.yAxes.push(am5xy.CategoryAxis.new(root, {
+                categoryField: "scenario",
+                renderer: am5xy.AxisRendererY.new(root, { inversed: true }),
+                tooltip: am5.Tooltip.new(root, {})
+            }));
+
+            var xAxis = chart.xAxes.push(am5xy.ValueAxis.new(root, {
+                renderer: am5xy.AxisRendererX.new(root, {})
+            }));
+
+            yAxis.data.setAll(data);
+
+            // Create series function
+            function createSeries(field, name, colorField) {
+                var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+                    stacked: true,
+                    name: name,
+                    xAxis: xAxis,
+                    yAxis: yAxis,
+                    valueXField: field,
+                    categoryYField: "scenario"
+                }));
+
+                series.columns.template.setAll({
+                    tooltipText: "{name}: {valueX}",
+                    fill: am5.color(0), // Temporary color, will be overridden
+                    stroke: am5.color(0) // Temporary color, will be overridden
+                });
+
+                series.data.setAll(data);
+
+                series.columns.template.adapters.add("fill", (fill, target) => {
+                    return am5.color(target.dataItem.dataContext[colorField]);
+                });
+
+                series.columns.template.adapters.add("stroke", (stroke, target) => {
+                    return am5.color(target.dataItem.dataContext[colorField]);
+                });
+            }
+
+            campos.forEach(campo => {
+                var indicator = indicators[campo];
+                // Create series for each part
+                createSeries(campo.toLowerCase(), `${indicator.nombre} (${indicator.unidad})`, `${campo.toLowerCase()}Color`); 
+            });
+
+            // Make stuff animate on load
+            chart.appear(1000, 100);
+
+            }); // end am5.ready()
+    }
+</script>
+<script>
+    function build_chart(kind, data, target, fields) {
+        var builders;
+        if (!built_charts.hasOwnProperty(target)) {
+            builders = {
+                flor: build_flower,
+                radar: build_radar,
+                barra: build_bar,
+            }
+        } else {
+            builders = {
+                flor: update_flower_radar_bar,
+                radar: update_flower_radar_bar,
+                barra: update_flower_radar_bar,
+            }
+        }
+        builders[kind](data, target, fields);
+    }
+</script>
+<script>
+    function addLineBreaks(inputString) {
+        let words = inputString.split(' ');
+        let result = '';
+
+        for (let i = 0; i < words.length; i++) {
+            result += words[i];
+
+            if (i !== words.length - 1) {
+                result += ' ';
+            }
+
+            if ((i + 1) % 3 === 0 && i !== words.length - 1) {
+                result += '\n';
+            }
+        }
+
+        return result;
+    }
+    function loadgraphs () {
+        categorias.forEach(function(categoria) {
+            if(categoria.chart.enabled) {
+                var chart_data = [];
+                if(["flor", "radar"].includes(categoria.chart.tipo)) {
+                    categoria.chart.campos.forEach(campo => {
+                        var chart_category = {
+                            category: addLineBreaks(`${indicators[campo]["nombre"]} (${indicators[campo]["unidad"]})`),
+                        }
+                        var counter=1;
+                        for (let i in escenarios) {
+                            sub_df = escenarios_sub_dfs[i];
+                            manipulable_data = dfd.toJSON(sub_df)[0];
+                            chart_category[`value${counter}`] = manipulable_data[campo];
+                            counter++;
+                        }
+                        chart_data.push(chart_category);
+                    });
+                } else if (["barra"].includes(categoria.chart.tipo)){
+                    var colores_barras = [
+                        [
+                            "#94abbc",
+                            "#a2bbcf",
+                            "#b4cee3",
+                            "#c1dcf3",
+                        ],
+                        [
+                            "#d13b66",
+                            "#eb4776",
+                            "#ef648b",
+                            "#f27b9c",
+                        ],
+                        [
+                            "#8db736",
+                            "#ace045",
+                            "#bcea5f",
+                            "#dbff94",
+                        ],
+                    ]
+                    var j = 0;
+                    for (let i in escenarios) {
+                        escenario = escenarios[i];
+                        serie = {
+                            scenario: escenario.nombre,
+                        }
+                        var k = 0;
+                        categoria.chart.campos.forEach(campo => {
+                            sub_df = escenarios_sub_dfs[i];
+                            manipulable_data = dfd.toJSON(sub_df)[0];
+                            serie[campo.toLowerCase()] = manipulable_data[campo.toLowerCase()];
+                            serie[`${campo.toLowerCase()}Color`] = colores_barras[j][k];
+                            k++;
+                        });
+                        j++;
+                        chart_data.push(serie);
+                    }
+                }
+                build_chart(categoria.chart.tipo, chart_data, categoria.id, categoria.chart.campos);
+            }
+        });
+        
+    };
+</script>
+<script type="text/javascript">
+    var escenarios_sub_dfs = {};
+    var tmout = 0;
+    var delete_stack = [];
+    var controles = JSON.parse($('#controles').text());
+    var indicators = JSON.parse($('#indicadores').text());
+    // var ci = JSON.parse($('#ci').text());
+    var escenarios = JSON.parse($('#escenarios').text());
+    var base_map_elements = JSON.parse($('#base_map_elements').text());
+    var categorias = JSON.parse($('#categorias').text());
+    var mapas = {
+        "mapas": {},
+        "layers": {}
+    };
+    var colors = {
+        "urban_footprint": "#95a3d8",
+        "transit": "#414fb7",
+        "nbs": "#2c4200",
+        "vision": "#8db736",
+    }
+
+    // df = new dfd.DataFrame(ci);
+
+    function orderLayers() {
+        const priorityOrder = ["BT", "transit", "NB", "HZ", "BF", "urban_footprint"];
+        for (const i in mapas.layers) {
+            const layer = mapas.layers[i];
+
+            // Custom Sorting Function
+            const sortedKeys = Object.keys(layer).sort((a, b) => {
+                const priorityA = priorityOrder.indexOf(a);
+                const priorityB = priorityOrder.indexOf(b);
+
+                // If a key isn't in the priority list, it goes last
+                if (priorityA === -1) return 1; 
+                if (priorityB === -1) return -1;
+
+                return priorityA - priorityB; // Sort by priority order
+            });
+
+            // Rebuild Layer Object
+            mapas.layers[i] = sortedKeys.reduce((obj, key) => {
+                obj[key] = layer[key];
+                return obj;
+            }, {});
+
+            // Bring Layers to Back (Maintain Original Loop)
+            for (const key in mapas.layers[i]) {
+                mapas.layers[i][key].bringToBack();
+            }
+        }
+    }
+
+    function sync_buttons() {
+        $(".delete-scenario-btn").off("click");
+        $(".delete-scenario-btn").on("click", function(evt) {
+            var parent = $(evt.target).closest(".escenario-edit");
+            var escenario_id = parent.find(".escenario-pk").val();
+            if(escenario_id != '') {
+                delete_stack.push(escenario_id);
+            }
+            parent.remove();
+        });
+    }
+
+    function calcularPorcentaje(minimo, maximo, entrada) {
+        // Verificar que la entrada no esté fuera de los límites
+        if (entrada < minimo || entrada > maximo) {
+            return 0
+        }
+        // Calcular la diferencia entre el máximo y el mínimo
+        const rango = maximo - minimo
+        // Calcular cuánto representa la entrada dentro del rango
+        const entradaEnRango = entrada - minimo
+        // Calcular el porcentaje
+        const porcentaje = (entradaEnRango / rango) * 100
+        return porcentaje
+    }
+    function get_current_sub_df(cur_sc) {
+        // sub_df = df
+        query = {};
+        for (i in controles) {
+            control = controles[i]
+            switch (control.tipo) {
+                case 'SLY':
+                    var value = $(`[data-target-indicator="${i}"][data-scenario="${cur_sc}"]`).val()
+                    break
+                case 'LY':
+                    var value = $(`[data-target-indicator="${i}"][data-scenario="${cur_sc}"]`).val()
+                    break
+                case 'SW':
+                    var value = $(`[data-target-indicator="${i}"][data-scenario="${cur_sc}"]`).is(':checked') ? 'Yes' : 'No'
+                    break
+                case 'RG':
+                    var value = control.opciones[parseInt($(`[data-target-indicator="${i}"][data-scenario="${cur_sc}"]`).val())];
+                    $(`.range-value-holder[data-target-indicator="${i}"][data-scenario="${cur_sc}"]`).html(`${value}%`);
+                    break
+            }
+            try {
+                query[i] = value;
+                // sub_df = sub_df.iloc({
+                //     rows: sub_df[i].eq(value)
+                // })
+                // sub_df = new dfd.DataFrame(dfd.toJSON(sub_df))
+            } catch {
+                debugger
+            }
+        }
+        return fetch("{% url 'api:filter-controls' object.pk %}", {
+                method: "POST",
+                body: JSON.stringify(
+                    query
+                ),
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "content-type": "application/json",
+                }
+            })
+                .then(res => {
+                    if (res.status == 200) {
+                        return res.json();
+                    } else {
+                        alert("An error has ocurred during the request, please contact an administrator.");
+                        return {};
+                    }
+                }).then(res_json=>{return new dfd.DataFrame(res_json.results);})
+                .catch(err => console.error(err));
+    }
+    function trigger_indicators(cur_sc) {
+        get_current_sub_df(cur_sc).then(
+            sub_df => {
+                manipulable_data = dfd.toJSON(sub_df)[0];
+                for (key in manipulable_data) {
+                    if (key in indicators) {
+                        indicator = indicators[key]
+                        min_value = indicator['niveles']['menor']
+                        max_value = indicator['niveles']['mayor']
+                        input_value = manipulable_data[key]
+                        porcentaje = calcularPorcentaje(min_value, max_value, input_value)
+                        container = $(`[data-indicator="con-${key}"][data-scenario="${cur_sc}"]`)
+                        container.find('.progress-bar').css('width', `${porcentaje}%`)
+                        container.find('.progress-bar').attr('aria-valuenow', `${porcentaje}`)
+                        container.find('.tag').html(`<b>${input_value.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</b> (${indicators[key]['unidad']})`)
+                    }
+                }
+                escenarios_sub_dfs[cur_sc] = sub_df;
+                if (Object.keys(escenarios_sub_dfs).length >= 3) {
+                    loadgraphs();
+                }
+            }
+        );
+    }
+    function tableToObj(table) {
+        // 1. Get table headers and data rows
+        const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent.trim().toLowerCase());
+        const rows = Array.from(table.querySelectorAll('tbody tr'));
+
+        // 2. Create empty JSON array
+        const jsonData = [];
+
+        // 3. Loop through rows, building objects
+        rows.forEach(row => {
+            const cells = Array.from(row.querySelectorAll('td'));
+            const rowObject = {};
+            // 4. Loop through cells, extracting and handling values
+            cells.forEach((cell, index) => {
+                const key = headers[index];
+                let value;
+                // Handle input type number
+                if (cell.querySelector('input[type="number"]')) {
+                    value = parseFloat(cell.querySelector('input[type="number"]').value);
+                    // Handle text area
+                } else if (cell.querySelector('textarea')) {
+                    value = cell.querySelector('textarea').value;
+                } else {
+                    value = cell.textContent.trim();
+                }
+                if (value === 0 || value === "0") {
+                    value = "";
+                }
+                rowObject[key] = value;
+            });
+            // 5. Add object to JSON array
+            jsonData.push(rowObject);
+        });
+        // 6. Return the JSON data (optional string conversion)
+        return jsonData
+    }
+    $(window).on('load', () => {
+        {% if proyecto.estatus == "PR" %}
+        let pollingInterval;
+
+        function checkStatus() {
+            fetch('/api/v1/proyectos/{{ proyecto.pk }}/')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const element = document.getElementById('project-processed');
+                    if (data.estatus != 'PR') {
+                        element.classList.remove('d-none');
+                        clearInterval(pollingInterval);
+                    } else if (data.estatus === 'PR') {
+                        element.classList.add('d-none');
+                        resetInterval();
+                    }
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                });
+        }
+
+        function resetInterval() {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+            }
+            pollingInterval = setInterval(checkStatus, 5000);
+        }
+
+        // Initial check and start polling
+        resetInterval();
+        {% endif %}
+        fetch(base_map_elements.BF.ruta)
+            .then(response => response.json())
+            .then(data => {
+                BFLayer = L.geoJSON(data);
+                step2(BFLayer);
+            });
+        function step3() {
+            for (let i in escenarios) {
+                for (let j in escenarios) {
+                    if(j != i) {
+                        mapas.mapas[i].sync(mapas.mapas[j])
+                    }
+                }
+            }
+            $(".leaflet-control-layers-selector").on("click", function(evt) {
+                var layer = $(evt.target).closest("span").text();
+                $(`.leaflet-control-layers-base span:contains('${layer}')`).click();
+            });
+        }
+        function step2(BFLayer) {
+            var bounds = BFLayer.getBounds();
+            var centerLat = (bounds.getSouth() + bounds.getNorth()) / 2;
+            var centerLng = (bounds.getWest() + bounds.getEast()) / 2;
+
+            $('.trigger').on('change', (evt) => {
+                cur_sc = evt.target.dataset["scenario"];
+                trigger_indicators(cur_sc);
+            });
+            for (let i in escenarios) {
+                var escenario_controls_value = escenarios[i].structure.controles;
+                for (const [control_id, value] of Object.entries(escenario_controls_value)) {
+                    var control_element = $(`[data-target-indicator="${control_id}"][data-scenario="${i}"]`);
+                    switch (controles[control_id].tipo) {
+                        case 'SLY':
+                            control_element.val(value);
+                            break
+                        case 'LY':
+                            control_element.val(value);
+                            break
+                        case 'SW':
+                            control_element.attr("checked", value)
+                            break
+                        case 'RG':
+                            control_element.val(value);
+                            break
+                    }
+                }
+                //mapas.mapas[i] = L.map(`map${i}`).setView([20.4960176, -86.9456521], 12);
+                mapas.mapas[i] = L.map(`map${i}`, {
+                    center: [centerLat, centerLng],
+                    zoom: 14,
+                });
+                
+                osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                });
+                osm.addTo(mapas.mapas[i]);
+
+                googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+                    maxZoom: 20,
+                    subdomains:['mt0','mt1','mt2','mt3']
+                });
+                googleStreets.addTo(mapas.mapas[i]);
+
+                googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+                    maxZoom: 20,
+                    subdomains:['mt0','mt1','mt2','mt3']
+                });
+                googleSat.addTo(mapas.mapas[i]);
+
+                var baseLayers = {
+                    "Google Maps": googleStreets,
+                    "Satellite": googleSat,
+                    "OpenStreetMap": osm,
+                };
+                L.control.layers(baseLayers, null, {position: 'topleft'}).addTo(mapas.mapas[i]);
+        
+                mapas.mapas[i].on('layeradd', function(e) {
+                    if (tmout) {
+                        clearTimeout(tmout);
+                    }
+                    tmout = setTimeout(() => {
+                        orderLayers();
+                    }, 100);
+    
+                });
+    
+                for (const [key, value] of Object.entries(controles)) {
+                    if(value.active) {
+                        if (value.tipo == "LY") {
+                            var select_value = $(`.layer[data-scenario="${i}"][data-target-indicator="${key}"]`).val();
+                            mapas.layers.hasOwnProperty(i) ? null : mapas.layers[i] = {};
+                            if (!mapas.layers[i].hasOwnProperty(key)) {
+                                (function (i, key) {
+                                    var color_key = key;
+                                    fetch(`/projects/geo_json${value["opciones"][select_value]["ruta"]}`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            mapas.layers[i][key] = L.geoJSON(data, {
+                                                style: {
+                                                    color: colors[color_key],
+                                                    weight: 2,
+                                                    opacity: 0.5,
+                                                    fillOpacity: 0.5 // Opacidad inicial
+                                                }
+                                            }).addTo(mapas.mapas[i]);
+                                            mapas.mapas[i].fitBounds(mapas.layers[i][key].getBounds());
+                                        });
+                                })(i, key);
+                            }
+                        } else if (value.tipo == "SLY") {
+                            var select_value = $(`.layer[data-scenario="${i}"][data-target-indicator="${key}"]`).val();
+                            mapas.layers.hasOwnProperty(i) ? null : mapas.layers[i] = {};
+                            if (!mapas.layers[i].hasOwnProperty(key)) {
+                                (function (i, key) {
+                                    fetch(`/projects/geo_json${value["opciones"][select_value]["ruta"]}`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            function getColor(d) {
+                                                return d > 2000 ? '#7a0177' :  // Darkest pink for highest values
+                                                    d > 1500 ? '#ae017e' :  // Darker pink
+                                                    d > 1000 ? '#dd3497' :  // Medium-dark pink
+                                                    d > 850  ? '#f768a1' :  // Medium pink
+                                                    d > 550  ? '#fa9fb5' :  // Light pink
+                                                    d > 200  ? '#fcc5c0' :  // Lighter pink
+                                                                '#fde0dd';   // Lightest pink for lowest values
+                                            }
+
+                                            function style(feature) {
+                                                return {
+                                                    fillColor: getColor(feature.properties.Total),
+                                                    weight: 2,
+                                                    opacity: 1,
+                                                    color: 'white',
+                                                    dashArray: '3',
+                                                    fillOpacity: 0.7
+                                                };
+                                            }
+                                            mapas.layers[i][key] = L.geoJSON(data, {style: style}).addTo(mapas.mapas[i]);
+                                            mapas.mapas[i].fitBounds(mapas.layers[i][key].getBounds());
+                                        });
+                                })(i, key);
+                            }
+                        }
+                    }
+                }
+                for (const [key, value] of Object.entries(base_map_elements)) {
+                    mapas.layers.hasOwnProperty(i) ? null : mapas.layers[i] = {};
+                    if (!mapas.layers[i].hasOwnProperty(key)) {
+                        (function (i, key) {
+                            fetch(value["ruta"])
+                                .then(response => response.json())
+                                .then(data => {
+                                    var opc = 0.5;
+                                    if (key == "NB") {
+                                        var layer_sw = $(`.layer-sw[data-target-layer="NB"][data-scenario="${i}"]`);
+                                        opc = layer_sw.is(':checked') ? 0.5 : 0;
+                                    }
+                                    mapas.layers[i][key] = L.geoJSON(data, {
+                                        style: {
+                                            fillColor: key == "BF" ? "transparent" : value["color"],
+                                            color: value["color"],
+                                            weight: 2,
+                                            opacity: opc,
+                                            fillOpacity: opc // Opacidad inicial
+                                        }
+                                    }).addTo(mapas.mapas[i]);
+                                });
+                        })(i, key);
+                    }
+                }
+                trigger_indicators(i);
+            }
+            $(".layer-sw").on("change", function (evt) {
+                var active = $(`[data-target-indicator="${i}"][data-scenario="${cur_sc}"]`).is(':checked');
+                var opc = parseFloat($(`.layer-opc[data-target-indicator='${$(evt.target).data("target-layer")}']`).val());
+                var indicator = evt.target.dataset.targetLayer;
+                var scenario = evt.target.dataset.scenario;
+                mapas.layers[scenario][indicator].setStyle({
+                    opacity: active ? opc : 0,
+                    fillOpacity: active ? opc : 0,
+                });
+            });
+            $(".layer-opc").on("input", function (evt) {
+                var opc = parseFloat(evt.target.value);
+                var indicator = evt.target.dataset.targetIndicator;
+                for (const [key, value] of Object.entries(mapas.layers)) {
+                    var active = true;
+                    if (indicator == "NB") {
+                        var active = $(`.layer-sw[data-target-layer="${indicator}"][data-scenario="${key}"]`).is(':checked');
+                    }
+                    value[indicator].setStyle({
+                        opacity: active ? opc : 0,
+                        fillOpacity: active ? opc : 0,
+                    });
+                }
+            });
+            function createHorizontalLegend() {
+                var legendDiv = document.getElementById('legend');
+                
+                // Create the gradient bar
+                var gradientBar = document.createElement('div');
+                gradientBar.className = 'gradient-bar';
+
+                // Create the container for the labels
+                var labelContainer = document.createElement('div');
+                labelContainer.className = 'label-container';
+
+                // Create the label for "Menor Densidad"
+                var minLabel = document.createElement('span');
+                minLabel.className = 'legend-label';
+                minLabel.innerHTML = 'Menor Densidad';
+
+                // Create the label for "Mayor Densidad"
+                var maxLabel = document.createElement('span');
+                maxLabel.className = 'legend-label';
+                maxLabel.innerHTML = 'Mayor Densidad';
+
+                // Append the labels to the label container
+                labelContainer.appendChild(minLabel);
+                labelContainer.appendChild(maxLabel);
+
+                // Append the gradient bar and label container to the legend div
+                legendDiv.appendChild(gradientBar);
+                legendDiv.appendChild(labelContainer);
+            }
+
+            // Call the function to create the legend
+            createHorizontalLegend();
+            $(".layer").on("change", function (evt) {
+                var layer = evt.target.value;
+                var indicator = evt.target.dataset.targetIndicator;
+                var scenario = evt.target.dataset.scenario;
+                var geo_json_path = controles[indicator].opciones[layer].ruta;
+                var mapa = mapas.mapas[scenario];
+                var opc = parseFloat($(`.layer-opc[data-target-indicator='${indicator}']`).val());
+                fetch(`/projects/geo_json${geo_json_path}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        var tipo = controles[indicator].tipo;
+                        mapas.mapas[scenario].removeLayer(mapas.layers[scenario][indicator]);
+                        if(tipo == "LY") {
+                            mapas.layers[scenario][indicator] = L.geoJSON(data, {
+                                style: {
+                                    color: colors[indicator],
+                                    weight: 2,
+                                    opacity: opc,
+                                    fillOpacity: opc // Opacidad inicial
+                                }
+                            }).addTo(mapa);
+                        } else if (tipo == "SLY") {
+                            function getColor(d) {
+                                return d > 2000 ? '#7a0177' :  // Darkest pink for highest values
+                                    d > 1500 ? '#ae017e' :  // Darker pink
+                                    d > 1000 ? '#dd3497' :  // Medium-dark pink
+                                    d > 850  ? '#f768a1' :  // Medium pink
+                                    d > 550  ? '#fa9fb5' :  // Light pink
+                                    d > 200  ? '#fcc5c0' :  // Lighter pink
+                                                '#fde0dd';   // Lightest pink for lowest values
+                            }
+
+                            function style(feature) {
+                                return {
+                                    fillColor: getColor(feature.properties.Total),
+                                    weight: 2,
+                                    opacity: 1,
+                                    color: 'white',
+                                    dashArray: '3',
+                                    fillOpacity: opc,
+                                    opacity: opc,
+                                };
+                            }
+                            mapas.layers[scenario][indicator] = L.geoJSON(data, {style: style}).addTo(mapa);
+                        }
+                    });
+            });
+            step3();
+        }
+
+        $("#cambiar-proyecto").on("change", function (evt) {
+            var url = `/projects/${$(evt.target).val()}/`;
+            window.location.href = url;
+        });
+
+        $("#assumptions-form").submit(function (evt) {
+            evt.stopPropagation();
+            evt.preventDefault();
+            var table_obj = tableToObj($("#assumptions-table")[0]);
+            var payload = {
+                data: table_obj
+            }
+            fetch("{% url 'api:update-assumptions' object.pk %}", {
+                method: "POST",
+                body: JSON.stringify(
+                    payload
+                ),
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "content-type": "application/json",
+                }
+            })
+                .then(res => {
+                    if (res.status == 200) {
+                        window.location.reload();
+                    } else {
+                        alert("An error has ocurred during the request, please contact an administrator.");
+                    }
+                })
+                .catch(err => console.error(err));
+        });
+        /* ESCENARIOS FUNCTIONS */
+        dragula([document.getElementById("escenarios-container")])
+            .on('drop', function (el) {
+                $(".posicion-escenario").each((ord, el) => { $(el).html(ord + 1) });
+            });
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        const toastLive = $('#escenariosToast');
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLive[0]);
+
+        $("#save-escenarios").on("click", function () {
+            for (let i in escenarios) {
+                var payload = {
+                    structure: {
+                        controles: {},
+                    },
+                };
+                for (const [control_id, control] of Object.entries(controles)) {
+                    var control_element = $(`[data-target-indicator="${control_id}"][data-scenario="${i}"]`);
+                    var value;
+                    switch (control.tipo) {
+                        case 'SLY':
+                            value = control_element.val();
+                            break
+                        case 'LY':
+                            value = control_element.val();
+                            break
+                        case 'SW':
+                            value = control_element.is(":checked")
+                            break
+                        case 'RG':
+                            value = parseInt(control_element.val());
+                            break
+                    }
+                    payload.structure.controles[control_id] = value;
+                }
+                fetch(`/api/v1/escenarios/${i}/`, {
+                    method: "PATCH",
+                    body: JSON.stringify(
+                        payload
+                    ),
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}",
+                        "content-type": "application/json",
+                    }
+                })
+                    .then(res => {
+                        if (res.status != 201) {
+                            alert("An error has ocurred during the request, please contact an administrator.");
+                            return false;
+                        }
+                    })
+                    .catch(err => console.error(err));
+                toastBootstrap.show();
+            }
+        });
+        $("#save-project-scenarios").on("click", function () {
+            $(".escenario-edit").each(
+                (ord, el) => {
+                    if($(el).find(".escenario-pk").val() != '') {
+                        payload = {
+                            posicion: $(el).find(".posicion-escenario").html(),
+                            nombre: $(el).find(".nombre-escenario").val(),
+                            descripcion: $(el).find(".descripcion-escenario").val(),
+                        };
+                        fetch(`/api/v1/escenarios/${$(el).find(".escenario-pk").val()}/`, {
+                            method: "PATCH",
+                            body: JSON.stringify(
+                                payload
+                            ),
+                            headers: {
+                                "X-CSRFToken": "{{ csrf_token }}",
+                                "content-type": "application/json",
+                            }
+                        })
+                            .then(res => {
+                                if (res.status != 201) {
+                                    alert("An error has ocurred during the request, please contact an administrator.");
+                                    return false;
+                                }
+                            })
+                            .catch(err => console.error(err));
+                    } else {
+                        payload = {
+                            structure: {
+                                controles: {}
+                            },
+                            posicion: $(el).find(".posicion-escenario").html(),
+                            nombre: $(el).find(".nombre-escenario").val(),
+                            descripcion: $(el).find(".descripcion-escenario").val()
+                        };
+                        fetch(`/api/v1/proyectos/{{ proyecto.pk }}/escenarios/`, {
+                            method: "POST",
+                            body: JSON.stringify(
+                                payload
+                            ),
+                            headers: {
+                                "X-CSRFToken": "{{ csrf_token }}",
+                                "content-type": "application/json",
+                            }
+                        })
+                            .then(res => {
+                                if (res.status != 201) {
+                                    alert("An error has ocurred during the request, please contact an administrator.");
+                                    return false;
+                                }
+                            })
+                            .catch(err => console.error(err));
+                    }
+                }
+            );
+            delete_stack.forEach(
+                (escenario_id) => {
+                    fetch(`/api/v1/escenarios/${escenario_id}/`, {
+                        method: "DELETE",
+                        headers: {
+                            "X-CSRFToken": "{{ csrf_token }}",
+                        }
+                    })
+                        .then(res => {
+                            if (res.status != 204) {
+                                alert("An error has ocurred during the request, please contact an administrator.");
+                                return false;
+                            }
+                        })
+                        .catch(err => console.error(err));
+                }
+            )
+            window.location.reload();
+        });
+        $('#add-escenario').click(function () {
+            var newTable = $('<div class="col-12 p-1">');
+            newTable.html(
+                `<div class="card p-2 my-1 bg-transparent escenario-edit">
+                    <table class="table">
+                        <tr class="bg-dark text-light">
+                            <td colspan="2">
+                                Scenario <span class="posicion-escenario">1</span>
+                                <input type="text" class="d-none escenario-pk">
+                                <button role="button" class="delete-scenario-btn btn bg-1 mx-2 float-end">
+                                    <img width="12px" src="{% static 'images/bin.png' %}">
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="bg-table">
+                            <th>Name</th>
+                            <td>
+                                <input type="text" class="form-control form-control-sm nombre-escenario bg-1"
+                                    value="New Scenario">
+                            </td>
+                        </tr>
+                        <tr class="bg-table">
+                            <th>Description</th>
+                            <td>
+                                <textarea class="form-control form-control-sm descripcion-escenario bg-1" id=""
+                                    cols="30" rows="5">Description for new scenario.</textarea>
+                            </td>
+                        </tr>
+                    </table>
+                </div>`
+            );
+            $('#escenarios-container').prepend(newTable);
+            $(".posicion-escenario").each((ord, el) => { $(el).html(ord + 1) });
+            sync_buttons()
+        });
+        // Selecting the trigger element
+        const showTitulosElement = $("#trigger-show-titulos");
+        const triggerCollapseElement = $("#trigger-collapse-titulos");
+        
+        // Selecting the elements to collapse
+        const collapseElementList = $(".collapse");
+        
+        // Intersection Observer to collapse elements when not in view
+        const observer = new IntersectionObserver(entries => {
+            if (!entries[0].isIntersecting) {
+                $("#trigger-show-titulos").addClass("d-none");
+                $("#trigger-collapse-titulos").removeClass("d-none");
+                const collapseList = collapseElementList.map(function() {
+                    return new bootstrap.Collapse(this);
+                });
+            }
+        });
+        
+        // Observing the trigger element
+        observer.observe(showTitulosElement[0]);
+
+        // Function to be called when the observed element is visible
+        function handleVisibility(entries, observer) {
+            entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                $("#trigger-show-titulos").removeClass("d-none");
+                $("#trigger-collapse-titulos").addClass("d-none");
+                const collapseList = collapseElementList.map(function() {
+                    return new bootstrap.Collapse(this);
+                });
+            }
+            });
+        }
+        
+        // Options for the observer (can be customized)
+        const options = {
+            root: null, // Use the viewport as the root
+            rootMargin: '0px', // No margin
+            threshold: 0.5 // Trigger when 50% of the element is visible
+        };
+        
+        // Create a new Intersection Observer
+        const observer2 = new IntersectionObserver(handleVisibility, options);
+        
+        // Start observing the target element
+        observer2.observe(triggerCollapseElement[0]);
+        sync_buttons();
+    });
+</script>
+{% endblock %}

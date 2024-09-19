@@ -1,0 +1,573 @@
+/* These styles are generated from project.scss. */
+:root {
+  --primarycolor: #212121;
+  --secondarycolor: #d13b66;
+  --personalizedbackgroundcolor: #f5f7ff;
+  --personalizedbackgroundcolor2: #dce0ea;
+  --baucolor: #94abbc;
+  --baucolortransparent: #94abbcaa;
+  --visioncolor: #d13b66;
+  --visioncolortransparent: #d13b66aa;
+  --myscenariocolor: #8db736;
+  --myscenariocolortransparent: #8db736aa;
+  --hazardcolor: #56ABD6;
+  --bordercolor: #93ABBC;
+  --tablecolor: #E5E8EF;
+  --selectcolor: #CEA5B5;
+}
+
+/* DIFERENTES TIPOS DE VARIANTES PARA LA FUENTE */
+
+.roboto-header {
+  font-size: 3rem;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.roboto-header-medium {
+  font-size: 2rem;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.roboto-thin {
+  font-family: "Roboto", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.roboto-light {
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.roboto-regular {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.roboto-medium {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.roboto-bold {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.roboto-black {
+  font-family: "Roboto", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.roboto-thin-italic {
+  font-family: "Roboto", sans-serif;
+  font-weight: 100;
+  font-style: italic;
+}
+
+.roboto-light-italic {
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.roboto-regular-italic {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.roboto-medium-italic {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.roboto-bold-italic {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.roboto-black-italic {
+  font-family: "Roboto", sans-serif;
+  font-weight: 900;
+  font-style: italic;
+}
+
+body {
+  font-size: 0.8rem;
+}
+
+.file-message {
+  font-size: large;
+}
+
+input,
+button,
+a,
+select,
+textarea {
+  background-color: transparent;
+  border-radius: 0 !important;
+}
+
+/* COLORES */
+.nav-item .nav-link {
+  color: var(--secondarycolor) !important;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: var(--personalizedbackgroundcolor2) !important;
+  font-weight: 700 !important;
+  color: black !important;
+}
+
+.nav-link:hover {
+  color: var(--secondarycolor);
+}
+
+.nav-link.color-secondary:hover {
+  color: white;
+}
+
+button.btn.btn-custom.borders-secondary:hover {
+  background-color: var(--secondarycolor);
+  color: white;
+}
+
+.table-personalized td {
+  border: solid #0C4972;
+  border-width: 0 0 1px 0;
+}
+
+.modal-content {
+  border-radius: 0 !important;
+}
+
+.modal {
+  background-color: #280f1ac4 !important;
+}
+
+.color-secondary {
+  color: var(--secondarycolor);
+}
+
+.background-primary {
+  background-color: var(--primarycolor);
+}
+
+.borders-primary {
+  border-color: var(--primarycolor);
+}
+
+.borders-secondary {
+  border-color: var(--secondarycolor);
+}
+
+.borders-bau {
+  border-color: var(--baucolor);
+}
+
+.borders-vision {
+  border-color: var(--visioncolor);
+}
+
+.borders-my {
+  border-color: var(--myscenariocolor);
+}
+
+.bg-bau {
+  background: var(--baucolor);
+}
+
+.color-bau {
+  color: var(--baucolor);
+}
+
+.color-bau::-webkit-slider-thumb {
+  background: var(--baucolor);
+}
+
+.color-bau::-moz-range-thumb {
+  background: var(--baucolor);
+}
+
+.color-bau::-ms-thumb {
+  background: var(--baucolor);
+}
+
+.color-opc-bau::-webkit-slider-thumb {
+  background: #95a3d8;
+}
+
+.color-opc-bau::-moz-range-thumb {
+  background: #95a3d8;
+}
+
+.color-opc-bau::-ms-thumb {
+  background: #95a3d8;
+}
+
+.color-opc-transit::-webkit-slider-thumb {
+  background: #414fb7;
+}
+
+.color-opc-transit::-moz-range-thumb {
+  background: #414fb7;
+}
+
+.color-opc-transit::-ms-thumb {
+  background: #414fb7;
+}
+
+.color-opc-nbs::-webkit-slider-thumb {
+  background: #2c4200;
+}
+
+.color-opc-nbs::-moz-range-thumb {
+  background: #2c4200;
+}
+
+.color-opc-nbs::-ms-thumb {
+  background: #2c4200;
+}
+
+.bg-BF {
+  background: black;
+}
+
+
+.color-BF {
+  color: black
+}
+
+.color-BF::-webkit-slider-thumb {
+  background: black
+}
+
+.color-BF::-moz-range-thumb {
+  background: black
+}
+
+.color-BF::-ms-thumb {
+  background: black
+}
+
+.bg-hazard {
+  background: var(--hazardcolor);
+}
+
+.color-hazard {
+  color: var(--hazardcolor);
+}
+
+.color-hazard {
+  color: var(--hazardcolor);
+}
+
+.color-hazard::-webkit-slider-thumb {
+  background: var(--hazardcolor);
+}
+
+.color-hazard::-moz-range-thumb {
+  background: var(--hazardcolor);
+}
+
+.color-hazard::-ms-thumb {
+  background: var(--hazardcolor);
+}
+
+.bg-HZ {
+  background: #ef5120;
+}
+
+.color-HZ {
+  color: #ef5120;
+}
+
+.color-HZ {
+  color: #ef5120;
+}
+
+.color-HZ::-webkit-slider-thumb {
+  background: #ef5120;
+}
+
+.color-HZ::-moz-range-thumb {
+  background: #ef5120;
+}
+
+.color-hazard::-ms-thumb {
+  background: #ef5120;
+}
+
+.bg-vision {
+  background: var(--visioncolor);
+}
+
+.color-vision {
+  color: var(--visioncolor);
+}
+
+.color-vision::-webkit-slider-thumb {
+  background: var(--visioncolor);
+}
+
+.color-vision::-moz-range-thumb {
+  background: var(--visioncolor);
+}
+
+.color-vision::-ms-thumb {
+  background: var(--visioncolor);
+}
+
+.color-opc-vision::-webkit-slider-thumb {
+  background: #414fb7;
+}
+
+.color-opc-vision::-moz-range-thumb {
+  background: #414fb7;
+}
+
+.color-opc-vision::-ms-thumb {
+  background: #414fb7;
+}
+
+.bg-BT {
+  background: #1ddddd;
+}
+
+.color-BT {
+  color: #1ddddd;
+}
+
+.color-BT::-webkit-slider-thumb {
+  background: #1ddddd;
+}
+
+.color-BT::-moz-range-thumb {
+  background: #1ddddd;
+}
+
+.color-BT::-ms-thumb {
+  background: #1ddddd;
+}
+
+.bg-my {
+  background: var(--myscenariocolor);
+}
+
+.color-my {
+  color: var(--myscenariocolor);
+}
+
+.color-my::-webkit-slider-thumb {
+  background: var(--myscenariocolor);
+}
+
+.color-my::-moz-range-thumb {
+  background: var(--myscenariocolor);
+}
+
+.color-my::-ms-thumb {
+  background: var(--myscenariocolor);
+}
+
+.bg-my {
+  background: var(--myscenariocolor);
+}
+
+.color-NB {
+  color: #a1d318;
+}
+
+.color-NB::-webkit-slider-thumb {
+  background: #a1d318;
+}
+
+.color-NB::-moz-range-thumb {
+  background: #a1d318;
+}
+
+.color-NB::-ms-thumb {
+  background: #a1d318;
+}
+
+.bg-1 {
+  background-color: var(--personalizedbackgroundcolor);
+}
+
+.bg-2 {
+  background-color: var(--personalizedbackgroundcolor2) !important;
+}
+
+.bg-table {
+  background-color: var(--tablecolor);
+}
+
+.bg-select {
+  background-color: var(--selectcolor);
+}
+
+.btn-custom:hover {
+  background-color: #dce0ea;
+}
+
+.alert-debug {
+  color: black;
+  background-color: white;
+  border-color: #d6e9c6;
+}
+
+.alert-error {
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+}
+
+.bg-personalized {
+  background-color: var(--primarycolor);
+}
+
+.list-group-item.active {
+  background-color: var(--secondarycolor);
+  border-color: #212121;
+}
+
+/* listados */
+
+ul {
+  margin: 0;
+}
+
+ul.dashed {
+  list-style-type: none;
+}
+
+ul.dashed>li {
+  text-indent: -5px;
+}
+
+ul.dashed>li:before {
+  content: "-";
+  text-indent: -5px;
+}
+
+/* OTROS */
+.map {
+  height: 300px;
+}
+
+.progress {
+  border-radius: 0;
+}
+
+.switch-control {
+  border-radius: 2em !important;
+}
+
+.custom-border {
+  border: solid var(--personalizedbackgroundcolor2);
+  border-width: 0 2px 0 0;
+}
+
+.custom-dashed-border {
+  border: dashed var(--personalizedbackgroundcolor2);
+  border-width: 0 0 1px 0;
+}
+
+.dashed-container {
+  border: 1px dashed var(--bordercolor);
+  min-height: 160px;
+}
+
+.table>tbody>tr>td {
+  vertical-align: middle;
+}
+
+.escenario-edit {
+  cursor: grab;
+  border: none;
+}
+
+.escenario-edit:active {
+  cursor: grabbing;
+}
+
+button.btn.btn-custom.borders-secondary,
+a.btn.btn-custom.borders-secondary {
+  width: 180px !important;
+  max-height: 40px !important;
+}
+
+/* Navbar images effect --------------------> */
+
+.navbar-header img {
+  transition: all 0.5s;
+}
+
+/* Get bigger when hover */
+.navbar-header img:hover {
+  transform: scale(1.1);
+}
+
+/* Right nav-brand border */
+.navbar-header a:first-child {
+  border-right: 1.5px solid white;
+}
+
+
+.navbar-header a:first-child img {
+  padding-right: 1rem;
+}
+
+/* No padding-y in the brand */
+.navbar {
+  --bs-navbar-brand-padding-y: 0;
+}
+
+/* Legend */
+.legend-horizontal {
+  text-align: center;
+  margin-top: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.gradient-bar {
+  width: 80%;
+  height: 20px;
+  background: linear-gradient(to right, 
+      #fde0dd, /* Lightest pink */
+      #fcc5c0, /* Lighter pink */
+      #fa9fb5, /* Light pink */
+      #f768a1, /* Medium pink */
+      #dd3497, /* Medium-dark pink */
+      #ae017e, /* Darker pink */
+      #7a0177  /* Darkest pink */
+  );
+  margin: 0 auto;
+  border-radius: 5px;
+  margin-bottom: 10px; /* Add some space between the bar and the labels */
+}
+
+.label-container {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.legend-label {
+  font-size: 14px;
+  color: #555;
+}

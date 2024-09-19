@@ -1,0 +1,39 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{% blocktranslate %}Your Registration is Authorized{% endblocktranslate %}</title>
+    <style>
+        .register-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: transparent;
+            /* Make background transparent */
+            color: black;
+            text-decoration: none;
+            border: 2px solid #d13b66;
+            /* Outline color */
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="https://demo.urbanperformance.in/static/images/up.png" alt="Urban Performance Logo"
+        style="width:100%; display: block; margin: 0 auto; padding-bottom: 20px;">
+
+    
+    <p>{% translate "Dear" %} {{ pre_user.email }},</p>
+    <p>{% blocktranslate %}Congratulations! Your email has been authorized. You are now one step closer to joining the Urban Performance community.{% endblocktranslate %}</p>
+    
+    <p>{% blocktranslate %}Complete your registration by clicking the button below:{% endblocktranslate %}</p>
+    <a href="{{ register_url }}" class="register-button">{% blocktranslate %}Complete Registration{% endblocktranslate %}</a>
+    
+    <p>{% blocktranslate %}We look forward to welcoming you!{% endblocktranslate %}</p>
+    <p>{% translate "Sincerely" %},</p>
+    <p>{% blocktranslate %}The Urban Performance Team{% endblocktranslate %}</p>
+</body>
+
+</html>

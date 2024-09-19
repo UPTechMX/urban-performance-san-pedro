@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+{% block inline_css %}
+<style>
+
+</style>
+{% endblock inline_css %}
+{% block content %}
+<div class="row mt-5">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <div class="card p-4 text-center bg-1">
+            <div class="row">
+                <div class="col-2"></div>
+                <div class="col-8">
+                    <img src="{% static 'images/person_2.png' %}" alt="">
+                </div>
+                <div class="col-2"></div>
+            </div><br>
+            <h4>
+                {% trans "Join to Urban Performance wait list!" %}
+            </h4>
+            <p>{% blocktranslate %}Sorry, our registrations are currently closed, alternatively you can enter your email address to be put on the waiting list and we will contact you.{% endblocktranslate %}</p>
+
+            <form method="POST">
+                {% csrf_token %}
+                <label for="name" class="form-label requiredField">
+                    Email<span class="asteriskField">*</span> </label>
+                <input name="email" type="email" class="borders-secondary textinput form-control">
+                <br>
+                <button type="submit" class="btn btn-custom w-100 borders-secondary">
+                    {% trans "Pre-register" %}
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-4"></div>
+</div>
+{% endblock content %}
+
+{% block inline_javascript %}
+<script>
+</script>
+{% endblock %}

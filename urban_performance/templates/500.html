@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Server Error" %}{% endblock title %}
+{% block content %}
+  
+  <h1>{% translate "Ooops!!! 500" %}</h1>
+  <h3>{% blocktranslate %}Looks like something went wrong!{% endblocktranslate %}</h3>
+  <p>
+    {% blocktranslate %}We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try refreshing.{% endblocktranslate %}
+  </p>
+  
+{% endblock content %}

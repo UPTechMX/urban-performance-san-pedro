@@ -1,0 +1,35 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% blocktranslate %}Confirm Your Email & Join the Waitlist{% endblocktranslate %}</title>
+  <style>
+    .confirm-button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: transparent; 
+      color: black; 
+      text-decoration: none;
+      border: 2px solid #d13b66;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <img src="https://demo.urbanperformance.in/static/images/up.png" alt="Uran Peformance Logo" style="width:100%; display: block; margin: 0 auto; padding-bottom: 20px;">
+
+  
+  <p>{% translate "Hi" %} {{ pre_user.email }},</p>
+  <p>{% blocktranslate %}Thanks for your interest in Urban Performance! To secure your spot on our waitlist, please confirm your email address by clicking the button below:{% endblocktranslate %}</p>
+  
+
+  <a href="{{ confirmation_url }}" class="confirm-button">{% translate "Confirm Email" %}</a>
+
+  <p>{% blocktranslate %}Once confirmed, you'll be among the first to know when registration opens.{% endblocktranslate %}</p>
+
+  <p>{% blocktranslate %}We can't wait to have you join us!{% endblocktranslate %}</p>
+  <p>{% translate "Best Regards" %},</p>
+  <p>{% blocktranslate %}The Urban Performance Team{% endblocktranslate %}</p>
+</body>
+</html>

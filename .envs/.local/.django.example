@@ -1,0 +1,21 @@
+# General
+# ------------------------------------------------------------------------------
+USE_DOCKER=yes
+IPYTHONDIR=/app/.ipython
+# Redis
+# ------------------------------------------------------------------------------
+REDIS_URL=redis://redis:6379/0
+
+# Celery
+# ------------------------------------------------------------------------------
+
+# Flower
+CELERY_FLOWER_USER=change_me
+CELERY_FLOWER_PASSWORD=change_me
+
+EMAIL_HOST = 'changeme.com'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = 'change@me.com'
+EMAIL_HOST_PASSWORD = 'STRONG_PASSWORD' 
+EMAIL_SENDER = "No Reply - Urban Performance <change@me.com>"

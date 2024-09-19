@@ -1,0 +1,36 @@
+<!----------------------------- PREPARATION ---------------------------- -->
+
+<!----------------------- Fetch the base template ---------------------- -->
+{% extends 'base.html' %}
+<!------------------------- Load static files -------------------------- -->
+{% load static i18n %}
+
+<!--------------------------- Link CSS file ---------------------------- -->
+{% block inline_css %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+{% endblock %}
+
+<!--------------------------- MAIN CONTENT ----------------------------- -->
+{% block content %}
+<!---------------------------- Login box ------------------------------ -->
+<div class="login-main-box">
+    <div class="login-box rounded">
+        <div class="image-box">
+            <i class="bi bi-person-circle" style="font-size: 6.5rem; color:#cea5b5"></i>
+            <br />
+            <h2>{% translate 'Sign Out' %}</h2>
+        </div>
+        <div class="login-btn">
+            <p>
+                {% trans 'Are you sure you want to sign out?' %}
+            </p>
+            <form method="post" action="/en/accounts/logout/">
+                {% csrf_token %}
+
+                <button type="submit" class="btn btn-custom borders-secondary">{% translate 'Sign Out' %}</button><br>
+                <a class="btn btn-custom borders-secondary mt-3" href="{% url 'home' %}">{% trans 'Take me back' %}</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

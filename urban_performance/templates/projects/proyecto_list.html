@@ -1,0 +1,761 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+{% block inline_css %}
+<style>
+
+</style>
+{% endblock inline_css %}
+{% block content %}
+<div class="p-5">
+    {% if request.user.is_authenticated %}
+    <div class="row float-end mb-4">
+        <button type="button" class="btn btn-custom borders-secondary" data-bs-toggle="modal"
+            data-bs-target="#newProjectModal" data-bs-dismiss="modal">{% translate "Create new project +" %}</button>
+    </div>
+    {% endif %}
+    <div class="modal modal-md fade" id="deleteProjectModal" tabindex="-1" aria-labelledby="newProjectModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-1">
+                <div class="modal-body">
+                    <div class="title-container text-center w-100">
+                        <h3 class="roboto-header-medium">
+                            {% translate "Delete Project" %}
+                        </h3>
+                    </div>
+                    <p class="w-100 text-center">
+                        {% blocktranslate %}Are you sure you want to delete the project{% endblocktranslate %} <span id="project-name-holder" class="color-secondary"></span>?
+                    </p>
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn w-100 btn-custom borders-secondary my-1 mx-3"
+                                data-bs-dismiss="modal">{% translate "Cancel" %}</button>
+                        <a class="btn w-100 btn-custom borders-secondary my-1 mx-3" id="delete-project-anchor">{% translate "Delete" %}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal modal-xl fade" id="editProjectModal" tabindex="-1" aria-labelledby="editProjectModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-1">
+                <div class="modal-body">
+                    <div class="w-100">
+                        <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="title-container text-center w-100 mb-3">
+                        <h3 class="roboto-header-medium">
+                            {% translate "Edit Project" %}
+                        </h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="list-group list-group-horizontal" id="edit-list-tab" role="tablist">
+                                <a class="list-group-item list-group-item-action active mx-3"
+                                    id="list-project-data-list" data-bs-toggle="list"
+                                    href="#list-project-data" role="tab"
+                                    aria-controls="list-project-data">{% translate "1. Project Data" %}</a>
+                                <a class="list-group-item list-group-item-action mx-3"
+                                    id="list-project-files-list" data-bs-toggle="list"
+                                    href="#list-project-files" role="tab"
+                                    aria-controls="list-project-files">{% translate "2. Project Files" %}</a>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <form id="editProjectForm" enctype="multipart/form-data" method="POST">
+                                <div class="tab-content p-3" id="nav-tabContent">
+                                    <div class="tab-pane fade show active" id="list-project-data"
+                                        role="tabpanel" aria-labelledby="list-project-data-list">
+                                        <table class="table table-borderless">
+                                            <tr>
+                                                <td class="">{% translate "2. Project name" %}</td>
+                                                <td>
+                                                    <input name="nombre" id="edit-nombre" type="text"
+                                                        class="form-control form-control-sm borders-vision bg-transparent w-50">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="">{% translate "Description" %}</td>
+                                                <td>
+                                                    <textarea id="edit-descripcion" name="descripcion" id=""
+                                                        class="form-control borders-vision bg-transparent w-50"
+                                                        rows="3"></textarea>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="">{% translate "City" %}</td>
+                                                <td>
+                                                    <input id="edit-ciudad" name="ciudad" type="text"
+                                                        class="form-control form-control-sm borders-vision bg-transparent w-50">
+                                                    <input id="nombre-original-ciudad" class="d-none">
+                                                    <div class="form-text ciudad-help d-none">
+                                                        {% blocktranslate %}Please use a different City name.{% endblocktranslate %}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="">{% blocktranslate %}Allow to be used as template?{% endblocktranslate %}</td>
+                                                <td>
+                                                    <div class="input-group mb-3 w-50 bg-transparent borders-vision">
+                                                        <div class="input-group-text">
+                                                            <input id="edit-uso_como_template" class="form-check-input mt-0" name="uso_como_template" type="checkbox">
+                                                        </div>
+                                                        <input type="text" class="form-control" value="{% blocktranslate %}Allow to be used as template?{% endblocktranslate %}" disabled>
+                                                    </div>                                                  
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="">{% translate "Assumptions" %}</td>
+                                                <td>
+                                                    {% blocktranslate trimmed %}The file should contain the assumptions that will be used for calculating the indicators 
+                                                    such as capital costs, maintenance costs, elasticities and return period for natural disasters.{% endblocktranslate %} <span
+                                                        class="color-secondary">{% blocktranslate %}assumptions in this file will be used for all the scenarios.{% endblocktranslate %}</span>
+                                                    
+                                                    <div class="row drag-drop-container mt-3" data-name-description="False" data-max="1" data-accept=".csv">
+                                                        <div class="col-6">
+                                                            <div class="w-100 file-drag-drop text-center p-3 dashed-container">
+                                                                <img class="w-25" src="{% static 'images/cloud.png' %}" alt="">
+                                                                <p class="file-message">{% translate "Drag and Drop" %}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="w-100 input-drag-drop p-3 dashed-container text-center">
+                                                                <p>{% translate "Or choose a file" %}</p>
+                                                                <button type="button" class="btn btn-sm btn-custom borders-secondary btn-browse">{% translate "Browse your files" %}</button>
+                                                                <input class="dummy-input d-none" type="file" name="" accept=".csv"><br>
+                                                                <span class="my-2">{% translate "Supported filetype:" %} .csv</span><br>
+                                                                <a class="color-secondary" href="">{% translate "Download example file" %}</a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 mt-3">
+                                                            <table class="table files-container edit-assumptions-container">
+                                                                <tr class="bg-dark text-light text-center">
+                                                                    <th>{% translate "File" %}</th>
+                                                                    <th>{% translate "Download" %}</th>
+                                                                    <th>{% translate "Delete" %}</th>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tab-pane fade" id="list-project-files" role="tabpanel"
+                                        aria-labelledby="list-project-files-list">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h3 class="roboto-header-medium">Upload Project Files</h3>
+                                                <div class="tab-pane fade show active" id="list-base-footprint"
+                                                    role="tabpanel" aria-labelledby="list-base-footprint-list">
+                                                    {% include 'projects/files_selector.html' with name_description=True field="Urban Footprint" kind="PF" max=1 accept=".zip" %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% comment %}
+                                    <div class="tab-pane fade" id="list-project-controls" role="tabpanel"
+                                        aria-labelledby="list-project-controls-list">
+                                        <div id="project-controls">
+                                            <table class="table controls-container" id="project-controls-table">
+                                                <tr class="bg-dark text-light text-center">
+                                                    <th>{% translate "Name" %}</th>
+                                                    <th>{% translate "Description" %}</th>
+                                                    <th>{% translate "Field" %}</th>
+                                                    <th>{% translate "Kind" %}</th>
+                                                    <th>{% translate "Delete?" %}</th>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="list-project-indicators" role="tabpanel"
+                                        aria-labelledby="list-project-indicators-list">
+                                        <div id="project-indicators">
+                                            <table class="table indicators-container" id="project-indicators-table">
+                                                <tr class="bg-dark text-light text-center">
+                                                    <th>{% translate "Name" %}</th>
+                                                    <th>{% translate "Description" %}</th>
+                                                    <th>{% translate "Field" %}</th>
+                                                    <th>{% translate "Unit" %}</th>
+                                                    <th>{% translate "Delete?" %}</th>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    {% endcomment %}
+                                </div>
+                                <input class="d-none spatial-counter" type="number" name="spatial_counter">
+                            </form>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-custom borders-secondary my-1 mx-3" type="button"
+                            data-bs-dismiss="modal">{% translate "Cancel" %}</button>
+                        <div>
+                            <button id="saveEditForm" type="button" class="btn btn-custom borders-secondary my-1 mx-3" type="button"
+                                disabled>{% translate "Save" %}</button><br>
+                            <small class="font-sm text-muted save-info">{% blocktranslate %}Please fill all the fields to enable the button.{% endblocktranslate %}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal modal-xl fade" id="newProjectModal" tabindex="-1" aria-labelledby="newProjectModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-1">
+                <div class="modal-body">
+                    <div class="title-container text-center w-100">
+                        <div class="w-100">
+                            <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <h3 class="roboto-header-medium">
+                            {% translate "New Project" %}
+                        </h3>
+                    </div>
+                    <div class="carousel-container">
+                        <form id="newProjectForm" action="{% url 'projects:project_list' %}" enctype="multipart/form-data" method="POST">
+                            {% csrf_token %}
+                            <div id="carouselNewProject" class="carousel slide" data-bs-interval="false"
+                                data-bs-wrap="false">
+                                <div class="carousel-inner">
+                                    <div id="step-1" class="carousel-item active px-5 pt-3">
+                                        <table class="table table-borderless">
+                                            <tr>
+                                                <td class="">{% translate "Use Template" %}</td>
+                                                <td>
+                                                    <select id="from-template" class="form-select-sm w-50 borders-vision" name="from-template">
+                                                        <option value="">{% translate "No project" %}</option>
+                                                        {% for proyecto in proyectos_templates %}
+                                                        <option value="{{ proyecto.uuid }}">{{ proyecto.creado_por.email}}: {{ proyecto.ciudad }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="">{% translate "Project name" %}</td>
+                                                <td>
+                                                    <input name="nombre" type="text"
+                                                        class="form-control form-control-sm borders-vision bg-transparent w-50">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="">{% translate "Description" %}</td>
+                                                <td>
+                                                    <textarea name="descripcion" id=""
+                                                        class="form-control borders-vision bg-transparent w-50"
+                                                        rows="3"></textarea>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="">{% translate "City" %}</td>
+                                                <td>
+                                                    <input name="ciudad" type="text"
+                                                        class="form-control form-control-sm borders-vision bg-transparent w-50">
+                                                    <div class="form-text ciudad-help d-none">
+                                                        {% blocktranslate %}Please use a different City name.{% endblocktranslate %}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="">{% blocktranslate %}Allow to be used as template?{% endblocktranslate %}</td>
+                                                <td>
+                                                    <div class="input-group mb-3 w-50 bg-transparent borders-vision">
+                                                        <div class="input-group-text">
+                                                            <input class="form-check-input mt-0" name="uso_como_template" type="checkbox">
+                                                        </div>
+                                                        <input type="text" class="form-control" value="{% blocktranslate %}Allow to be used as template?{% endblocktranslate %}" disabled>
+                                                    </div>                                                  
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="">{% translate "Assumptions" %}</td>
+                                                <td>
+                                                    <div class="w-100"></div>
+                                                    {% blocktranslate trimmed %}The file should contain the assumptions that will be used for calculating the indicators 
+                                                    such as capital costs, maintenance costs, elasticities and return period for natural disasters.{% endblocktranslate %} <span
+                                                    class="color-secondary">{% blocktranslate %}assumptions in this file will be used for all the scenarios.{% endblocktranslate %}</span>
+                                                    
+                                                    <div class="drag-drop-container">
+                                                        <div class="row drag-drop-container mt-3" data-name-description="False" data-max="1" data-accept=".csv">
+                                                            <div class="col-6">
+                                                                <div class="w-100 file-drag-drop text-center p-3 dashed-container">
+                                                                    <img class="w-25" src="{% static 'images/cloud.png' %}" alt="">
+                                                                    <p class="file-message">{% translate "Drag and Drop" %}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="w-100 input-drag-drop p-3 dashed-container text-center">
+                                                                    <p>{% translate "Or choose a file" %}</p>
+                                                                    <button type="button" class="btn btn-sm btn-custom borders-secondary btn-browse">{% translate "Browse your files" %}</button>
+                                                                    <input class="dummy-input d-none" type="file" name="" accept=".csv"><br>
+                                                                    <span class="my-2">{% translate "Supported filetype:" %} .csv</span><br>
+                                                                    <a class="color-secondary" href="">{% translate "Download example file" %}</a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 mt-3">
+                                                                <table class="table files-container">
+                                                                    <tr class="bg-dark text-light text-center">
+                                                                        <th>{% translate "File" %}</th>
+                                                                        <th>{% translate "Download" %}</th>
+                                                                        <th>{% translate "Delete" %}</th>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div id="step-2" class="carousel-item px-5 pt-3">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h3 class="roboto-header-medium">Upload Project Files</h3>
+                                                <div class="tab-pane fade show active" id="list-base-footprint"
+                                                    role="tabpanel" aria-labelledby="list-base-footprint-list">
+                                                    {% include 'projects/files_selector.html' with name_description=True field="Urban Footprint" kind="PF" max=1 accept=".zip" %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="alert alert-dismissible alert-warning d-none alert-fill-fields">
+                                {% blocktranslate %}Please fill all the fields before continue.{% endblocktranslate %}
+                                <button type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="d-flex justify-content-center mt-3 save-cancel-container">
+                                <button type="button" class="btn btn-custom borders-secondary my-3 mx-3" type="button"
+                                    data-bs-target="#carouselNewProject" data-bs-slide="prev">{% translate "Previous" %}</button>
+                                <div>
+                                    <button id="saveNewForm" type="button" class="btn btn-custom borders-secondary my-3 mx-3" type="button"
+                                        data-bs-target="#carouselNewProject" data-bs-slide="next" disabled="true">{% translate "Next" %}</button><br>
+                                    <small class="font-sm text-muted save-info">{% blocktranslate %}Please fill all the fields to enable the button.{% endblocktranslate %}</small>
+                                </div>
+                            </div>
+                            <input class="d-none spatial-counter" type="number" name="spatial_counter">
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table table-bordered table-personalized">
+        <tr class="bg-dark text-light text-center">
+            <th>{% translate "Project Name" %}</th>
+            <th>{% translate "Last modified" %}</th>
+            <th>{% translate "Public project" %}</th>
+            <th>{% translate "Options" %}</th>
+            <th>{% translate "Status" %}</th>
+        </tr>
+        {% for proyecto in object_list %}
+        <tr class="bg-2">
+            <td>
+                <a href="{% if proyecto.progress == 100 %}{% url 'projects:project_detail' proyecto.pk %}{% endif %}" class="color-secondary">{{ proyecto.nombre }}</a>
+            </td>
+            <td class="text-center">{{ proyecto.ultima_actualizacion }}</td>
+            <td class="text-center">
+                <input type="checkbox" class="is-public" {% if proyecto.uso_como_template %}checked{% endif %} disabled>
+            </td>
+            <td class="text-center">
+                <a href="{% url 'projects:download_project_files' proyecto.pk %}" class="text-decoration-none">
+                    <button class="download-project-btn btn bg-1 mx-2">
+                        <img width="14px" src="{% static 'images/download.png' %}">
+                    </button>
+                </a>
+                {% if proyecto.creado_por == request.user %}
+                <button class="download-project-btn btn bg-1 mx-2" data-bs-toggle="modal"
+                data-bs-target="#editProjectModal" data-bs-dismiss="modal"
+                onclick="prepareEditForm('{{ proyecto.pk }}')">
+                    <img width="14px" src="{% static 'images/edit.png' %}">
+                </button>
+                <button role="button" data-bs-target="#deleteProjectModal" data-bs-toggle="modal" data-bs-dismiss="modal" class="delete-project-btn btn bg-1 mx-2" onclick="setProjectAttrs('{{ proyecto.nombre }}', '{% url "projects:project_delete" proyecto.pk %}');">
+                    <img width="12px" src="{% static 'images/bin.png' %}">
+                </button>
+                {% endif %}
+            </td>
+            <td>
+                {{ proyecto.get_estatus_display }}
+                {% if proyecto.estatus == "PR" %}
+                ({{ proyecto.progress }}%)
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
+
+{% block inline_javascript %}
+<script>
+    var cities_already_taken = [
+        {% for proyecto in object_list %}
+        "{{ proyecto.ciudad }}",
+        {% endfor %}
+    ];
+    function setProjectAttrs(prj_name, prj_href) {
+        $("#project-name-holder").html(prj_name);
+        $("#delete-project-anchor").prop("href", prj_href);
+    }
+    $(window).on("load", function () {
+        $(".file-drag-drop").on("dragover", function (evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            $(evt.target).find(".file-message").html("Drop the file here");
+            $(this).addClass('dragging');
+        });
+
+        $(".file-drag-drop").on("dragleave", function (evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            $(evt.target).find(".file-message").html("Drag and Drop");
+            $(this).removeClass('dragging');
+        });
+
+        const on_file_upload = (evt) => {
+            var parent = $(evt.target).closest(".drag-drop-container");
+            var extension = parent.data("accept");
+            var max_items = parseInt(parent.data("max"));
+            var name_description = JSON.parse(parent.data("name-description").toLowerCase());
+            var kind = parent.data("kind");
+            max_items = isNaN(max_items) ? Infinity : max_items;
+            var items = parent.find(".file-info-container").length;
+            var files = event.dataTransfer == undefined ? evt.target.files : event.dataTransfer.files;
+
+            evt.preventDefault();
+            evt.stopPropagation();
+
+            for (let i = 0; i < files.length && items < max_items; i++) {
+                const file = files[i];
+                if (file.name.endsWith(extension)) {
+                    const dT = new DataTransfer();
+                    dT.items.add(file);
+                    items++;
+                    const newRow = $("<tr class='bg-2 file-info-container'></tr>");
+                    newRow.html(`<td>
+                            <input type="text" class="d-none input-tipo" name="" value="${ kind }">
+                            <input type="text" class="form-control form-control-sm bg-1 name-holder" disabled>
+                            <input class="input-archivo d-none" type="file" name="assumptions">
+                        </td>
+                        <td class="text-center">
+                            <button type="button" class="download-file-btn btn bg-1">
+                                <img width="14px" src="{% static 'images/download.png' %}">
+                            </button>
+                        </td>
+                        <td class="text-center">
+                            <button type="button" class="delete-file-btn btn bg-1">
+                                <img width="12px" src="{% static 'images/bin.png' %}">
+                            </button>
+                        </td>
+                    `);
+
+                    const fileInput = newRow.find(".input-archivo");
+                    fileInput[0].files = dT.files;
+                    newRow.find(".name-holder").val(file.name);
+
+                    parent.find(".files-container").append(newRow);
+                }
+            }
+            sync_buttons();
+        }
+        $(".btn-browse").on("click", function (evt) {
+            var parent = $(evt.target).closest(".drag-drop-container");
+            parent.find(".dummy-input").click();
+        });
+        $(".file-drag-drop").on("drop", on_file_upload);
+        $(".dummy-input").on("change", on_file_upload);
+
+        sync_buttons();
+        $("#newProjectForm").on("submit", function() {
+            var spatial_files = $("#step-2").find(".file-info-container");
+            var counter = 0;
+            spatial_files.toArray().forEach(function (spatial_file) {
+                $(spatial_file).find(".input-archivo").prop("name", `spatial_zip_file`);
+                counter++;
+            });
+            $(".spatial-counter").val(counter);
+        });
+        $("#saveEditForm").on("click", function(evt) {
+            var spatial_files = $("#list-project-files").find(".file-info-container");
+            var counter = 0;
+            spatial_files.toArray().forEach(function (spatial_file) {
+                $(spatial_file).find(".input-nombre").prop("name", `spatial_files[${counter}][nombre]`);
+                $(spatial_file).find(".input-archivo").prop("name", `spatial_files[${counter}][archivo]`);
+                $(spatial_file).find(".input-descripcion").prop("name", `spatial_files[${counter}][descripcion]`);
+                $(spatial_file).find(".input-pk").prop("name", `spatial_files[${counter}][pk]`);
+                $(spatial_file).find(".input-tipo").prop("name", `spatial_files[${counter}][tipo]`);
+                counter++;
+            });
+            $(".spatial-counter").val(counter);
+            var formData = new FormData(document.getElementById("editProjectForm"));
+            fetch(`/api/v1/proyectos/${$(evt.target).data("project-pk")}/`, {
+                method: "PUT",
+                body: formData,
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                }
+            })
+                .then(res => {
+                    if (res.status == 200) {
+                        window.location.reload();
+                    } else {
+                        alert("An error has ocurred during the request, please contact an administrator.");
+                    }
+                })
+                .catch(err => console.error(err));
+        });
+    });
+    // Function to check if all input fields are filled
+    function areInputsFilled(step) {
+        var inputs = step.find('input[type="text"],textarea');
+        var input_ciudad = step.find('[name="ciudad"]');
+        var filled = true;
+
+        if(cities_already_taken.includes(input_ciudad.val()) && ($(".modal.show").prop("id") === "editProjectModal" && input_ciudad.val() != $("#nombre-original-ciudad").val())) {
+            step.find(".ciudad-help").removeClass("d-none");
+            return false;
+        } else {
+            step.find(".ciudad-help").addClass("d-none");
+        }
+        inputs.each(function () {
+            if (!$(this).val()) {
+                filled = false;
+                return false; // Exit the loop if any input is empty
+            }
+        });
+        return filled;
+    }
+
+    function isCSVFileUploaded(activeStep) {
+        var csvFileCount = activeStep.find(".file-info-container").length;
+        return csvFileCount > 0;
+    }
+
+    // Function to check if there's at least one file from each category
+    function areFilesUploaded() {
+        var categories = ['PF']; // Categories
+        var filesUploaded = true;
+        categories.forEach(function (category) {
+            var parentDiv = $(`div[data-kind="${category}"]`);
+            var fileCount = parentDiv.find('.files-container .file-info-container').length;
+            if (fileCount === 0) {
+                filesUploaded = false;
+                return false;
+            }
+        });
+        return filesUploaded;
+    }
+
+    // Function to enable/disable next button based on form completion
+    function enableButtons() {
+        if($(".modal.show").prop("id") === "newProjectModal") {
+            var from_template_val = $("#from-template").val();
+
+            var activeStep = $('.carousel-item.active');
+            var nextButton = $('[data-bs-slide="next"]');
+            if (activeStep.attr('id') === 'step-1') {
+                if(from_template_val == "") {
+                    var conditional = areInputsFilled(activeStep) && isCSVFileUploaded(activeStep);
+                } else {
+                    var conditional = areInputsFilled(activeStep);
+                }
+            } else  {
+                var conditional = areInputsFilled(activeStep) && areFilesUploaded();
+            }
+            if (conditional) {
+                nextButton.prop('disabled', false);
+                $(".save-info").addClass("d-none");
+            } else {
+                nextButton.prop('disabled', true);
+                $(".save-info").removeClass("d-none");
+            }
+        } else if ($(".modal.show").prop("id") === "editProjectModal") {
+            var saveButton = $('#saveEditForm');
+            var conditional = areInputsFilled($("#list-project-files")) && areInputsFilled($("#list-project-data")) && isCSVFileUploaded($("#list-project-data"));
+            if (conditional) {
+                saveButton.prop('disabled', false);
+                $(".save-info").addClass("d-none");
+            } else {
+                saveButton.prop('disabled', true);
+                $(".save-info").removeClass("d-none");
+            }
+        }
+    }
+    function fromTemplate() {
+        var from_template_val = $("#from-template").val();
+        var nextButton = $('#newProjectModal [data-bs-slide="next"]');
+        if(from_template_val == "") {
+            $("#newProjectModal .drag-drop-container").show();
+            nextButton.off("click");
+            nextButton.html("Next");
+            nextButton.prop("type", "button");
+        } else {
+            $("#newProjectModal .drag-drop-container").hide();
+            nextButton.html("Create Project");
+            nextButton.prop("type", "sumbit");
+            nextButton.on("click", function() {
+                $("#newProjectForm").submit();
+            });
+        }
+    }
+    function sync_buttons() {
+        // Call enableButtons initially
+        enableButtons();
+
+        // Remove previous event handlers to avoid duplicate bindings
+        $('input[type="text"],textarea').off('input');
+        $('.files-container').off('DOMNodeInserted DOMNodeRemoved');
+        $('#carouselNewProject').off('slid.bs.carousel');
+        $(".delete-file-btn").off("click");
+        $(".download-file-btn").off("click");
+        $("#from-template").off("change");
+
+        // Handle input change events to enable/disable next button
+        $('input[type="text"],textarea').on('input', enableButtons);
+        $('#from-template').on('change', enableButtons);
+        $('#from-template').on('change', fromTemplate);
+
+        // Handle file upload events to enable/disable next button
+        $('.files-container').on('DOMNodeInserted DOMNodeRemoved', enableButtons);
+
+        // on step change
+        $('#carouselNewProject').on('slid.bs.carousel', function (evt) {
+            enableButtons();
+            var activeStep = $('.carousel-item.active');
+            var nextButton = $('[data-bs-slide="next"]');
+            if (activeStep.attr('id') === 'step-2') {
+                nextButton.html("Create Project");
+                nextButton.prop("type", "sumbit");
+                nextButton.on("click", function() {
+                    $("#newProjectForm").submit();
+                });
+            } else {
+                nextButton.off("click");
+                nextButton.html("Next");
+                nextButton.prop("type", "button");
+            }
+        });
+        $(".delete-file-btn").on("click", function(evt) {
+            var parent = $(evt.target).closest(".file-info-container");
+            parent.remove();
+            enableButtons();
+        });
+        $(".download-file-btn").on("click", function(evt) {
+            var link = document.createElement('a');
+            var file_field = $(evt.target).parent().parent().find(".input-archivo")[0];
+            var file = file_field.files[0];
+            var filename = file_field.files[0].name;
+            var blob = new Blob([file]);
+            var url  = URL.createObjectURL(blob);
+
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        });
+    }
+
+    function getFilenameFromURL(url) {
+        // Split the URL by forward slashes
+        const parts = url.split('/');
+        
+        // Get the last part of the array, which is the filename
+        return parts.pop(); 
+    }
+    function prepareEditForm(project_pk) {
+        $("#saveEditForm").data("project-pk", project_pk);
+        const editForm = $("#editProjectForm");
+        editForm.find(".file-info-container").remove();
+        fetch(`/api/v1/proyectos/${project_pk}/`).then(res => {
+            if (res.status != 200) {
+                alert("An error has ocurred during the request, please contact an administrator.");
+                return false;
+            } else {
+                return res.json()
+            }
+        })
+            .then(res => {
+                var edit_form = $("#editProjectForm");
+                edit_form.find("#edit-nombre").val(res["nombre"]);
+                edit_form.find("#edit-ciudad").val(res["ciudad"]);
+                edit_form.find("#edit-descripcion").val(res["descripcion"]);
+                edit_form.find("#nombre-original-ciudad").val(res["ciudad"]);
+                edit_form.find("#edit-uso_como_template").prop("checked", res["uso_como_template"]);
+                const newRow = $("<tr class='bg-2 file-info-container'></tr>");
+                newRow.html(`
+                    <td>
+                        <input type="text" class="form-control form-control-sm bg-1 name-holder" value="assumptions.csv" disabled>
+                        <input class="input-archivo d-none" type="file" name="assumptions">
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="download-file-btn btn bg-1">
+                            <img width="14px" src="{% static 'images/download.png' %}">
+                        </button>
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="delete-file-btn btn bg-1">
+                            <img width="12px" src="{% static 'images/bin.png' %}">
+                        </button>
+                    </td>
+                `);
+                edit_form.find(".edit-assumptions-container").append(newRow);
+                sync_buttons(); // Call sync_buttons after all data is processed
+            })
+            .catch(err => console.error(err));
+
+            Promise.all([
+                fetch(`/api/v1/proyectos/${project_pk}/archivos-espaciales/`).then(handleFetchErrors).then(res => res.json())
+            ])
+            .then(([spatialFilesData]) => {
+                spatialFilesData.forEach(el => {
+                    const container = editForm.find(`.drag-drop-container[data-kind='${el.tipo}']`);
+                    const newRow = $("<tr class='bg-2 file-info-container'></tr>");
+                    newRow.html(`
+                        <td>
+                            <input class="form-control form-control-sm bg-1 input-nombre" value="${el.nombre}" type="text" name="spatial_files[][nombre]">
+                        </td>
+                        <td>
+                            <input type="text" class="d-none input-pk" name="" value="${el.pk}">
+                            <input type="text" class="d-none input-tipo" name="" value="${el.tipo}">
+                            <input type="text" class="form-control form-control-sm bg-1 name-holder" value="${getFilenameFromURL(el.archivo)}" disabled>
+                            <input class="input-archivo d-none" type="file" name="assumptions">
+                        </td>
+                        <td>
+                            <textarea class="form-control form-control-sm bg-1 input-descripcion" name="spatial_files[][descripcion]" id="" cols="30" rows="2">${el.descripcion}</textarea>
+                        </td>
+                        <td class="text-center">
+                            <a class="btn bg-1" href="${el.archivo}" target="_blank">
+                                <img width="14px" src="{% static 'images/download.png' %}">
+                            </a>
+                        </td>
+                        <td class="text-center">
+                            <button type="button" class="delete-file-btn btn bg-1">
+                                <img width="12px" src="{% static 'images/bin.png' %}">
+                            </button>
+                        </td>
+                    `);
+                    container.find(".files-container").append(newRow);
+                });
+        
+                sync_buttons(); // Call sync_buttons after all data is processed
+            })
+            .catch(err => {
+                console.error(err);
+                alert("An error has occurred during the request, please contact an administrator."); 
+            });
+            function handleFetchErrors(res) {
+                if (!res.ok) { // Use res.ok to check for any non-2xx status codes
+                    throw new Error(`Network response was not ok (status: ${res.status})`); 
+                }
+                return res;
+            }
+    }
+</script>
+{% endblock %}

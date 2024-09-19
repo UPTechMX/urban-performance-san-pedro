@@ -1,0 +1,31 @@
+/* LOG IN --------------------> */
+
+/* /////////////////////
+////////Login Main Page /////////
+//////////////////// */
+
+.login-box {
+    border: 1px solid #B2C9D6;
+    width: 27%;
+    text-align: center;
+    padding: 30px;
+}
+
+
+.login-main-box {
+    text-align: center;
+    /* justify-content: center; */
+    /* margin: 0 auto; */
+    /* height: 80vh; */
+    display: flex;
+    justify-content: center;
+    /* flex-direction: column; */
+    align-items: center;
+    padding: 100px 0;
+}
+
+
+.image-box h2 {
+    color: black;
+    font-size: 25px;
+}
