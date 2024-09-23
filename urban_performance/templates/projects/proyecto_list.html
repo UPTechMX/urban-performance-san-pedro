@@ -145,7 +145,7 @@
                                         aria-labelledby="list-project-files-list">
                                         <div class="row">
                                             <div class="col-12">
-                                                <h3 class="roboto-header-medium">Upload Project Files</h3>
+                                                <h3 class="roboto-header-medium">{% translate "Upload Project Files" %}</h3>
                                                 <div class="tab-pane fade show active" id="list-base-footprint"
                                                     role="tabpanel" aria-labelledby="list-base-footprint-list">
                                                     {% include 'projects/files_selector.html' with name_description=True field="Urban Footprint" kind="PF" max=1 accept=".zip" %}
@@ -312,7 +312,7 @@
                                     <div id="step-2" class="carousel-item px-5 pt-3">
                                         <div class="row">
                                             <div class="col-12">
-                                                <h3 class="roboto-header-medium">Upload Project Files</h3>
+                                                <h3 class="roboto-header-medium">{% translate "Upload Project Files" %}</h3>
                                                 <div class="tab-pane fade show active" id="list-base-footprint"
                                                     role="tabpanel" aria-labelledby="list-base-footprint-list">
                                                     {% include 'projects/files_selector.html' with name_description=True field="Urban Footprint" kind="PF" max=1 accept=".zip" %}
@@ -593,11 +593,11 @@
         if(from_template_val == "") {
             $("#newProjectModal .drag-drop-container").show();
             nextButton.off("click");
-            nextButton.html("Next");
+            nextButton.html("Siguiente");
             nextButton.prop("type", "button");
         } else {
             $("#newProjectModal .drag-drop-container").hide();
-            nextButton.html("Create Project");
+            nextButton.html("Crear Proyecto");
             nextButton.prop("type", "sumbit");
             nextButton.on("click", function() {
                 $("#newProjectForm").submit();

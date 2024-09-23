@@ -157,6 +157,7 @@ class ProyectoViewSet(viewsets.ModelViewSet):
                         return redirect("projects:project_list")
                     else:
                         try:
+                            SpatialFile.objects.filter(proyecto=proyecto).delete()
                             for (
                                 category_code,
                                 files_info,
@@ -171,7 +172,7 @@ class ProyectoViewSet(viewsets.ModelViewSet):
                                         descripcion=file_desc.split(".")[0].replace(
                                             "_", " "
                                         ),
-                                        proyecto=proyecto_instance,
+                                        proyecto=proyecto,
                                         archivo=ContentFile(
                                             file_content, name=file_name
                                         ),

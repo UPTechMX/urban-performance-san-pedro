@@ -75,6 +75,7 @@ DJANGO_APPS = [
     "django.forms",
 ]
 THIRD_PARTY_APPS = [
+    "django_cleanup.apps.CleanupConfig",
     "crispy_forms",
     "crispy_bootstrap5",
     "allauth",

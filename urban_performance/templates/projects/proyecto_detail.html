@@ -2,6 +2,7 @@
 {% load static i18n color %}
 {% block inline_css %}
 <link href="{% static 'css/dragula.min.css' %}" rel="stylesheet" />
+<link href="{% static 'css/Leaflet.BigImage.css' %}" rel="stylesheet" />
 <style>
     .chart {
       width: 100%;
@@ -94,7 +95,7 @@
         </div>
     </div>
 </div>
-<div class="row sticky-top bg-1 collapse" id="escenarios-titulos">
+<div class="row sticky-top bg-1 collapse d-print-none" id="escenarios-titulos">
     <div class="col-3"></div>
     {% for escenario_id, escenario in escenarios.items %}
     <div class="col-3 text-center">
@@ -110,12 +111,11 @@
             <p>
                 <b>{% translate "Scenarios" %}</b>
             </p>
-            <button data-bs-target="#projectScenarios" data-bs-dismiss="modal" data-bs-toggle="modal"
-                class="btn btn-custom w-100 borders-secondary d-print-none"
-                {% if not request.user.is_authenticated or not request.user.pk == object.creado_por.pk %}
-                disabled
-                {% endif %}
-            >{% translate "Edit scenarios" %}</button>
+            {% if request.user.is_authenticated and request.user.pk == object.creado_por.pk %}
+                <button data-bs-target="#projectScenarios" data-bs-dismiss="modal" data-bs-toggle="modal"
+                    class="btn btn-custom w-100 borders-secondary d-print-none"
+                >{% translate "Edit scenarios" %}</button>
+            {% endif %}
             <div class="w-100" id="trigger-show-titulos"></div>
         </div>
         {% for escenario_id, escenario in escenarios.items %}
@@ -190,19 +190,17 @@
                         </div>
                     </div>
                     <div class="p-2">
-                        <button class="btn btn-custom borders-secondary text-center d-print-none" data-bs-toggle="modal"
-                            data-bs-target="#assumptionsModal"
-                            {% if not request.user.is_authenticated or not request.user.pk == object.creado_por.pk %}
-                            disabled
-                            {% endif %}
-                        >{% translate "Assumptions set up" %}</button>
-                        <button class="btn btn-custom borders-secondary text-center d-print-none ms-5"
-                            id="save-escenarios"
-                            {% if not request.user.is_authenticated or not request.user.pk == object.creado_por.pk %}
-                            disabled
-                            {% endif %}
-                        >{% translate "Save" %} 💾</button>
-                    </div>
+                        {% if request.user.is_authenticated and request.user.pk == object.creado_por.pk %}
+                            <button class="btn btn-custom borders-secondary text-center d-print-none" data-bs-toggle="modal"
+                                data-bs-target="#assumptionsModal"
+                            >{% translate "Assumptions set up" %}</button>
+                        {% endif %}
+                        {% if request.user.is_authenticated and request.user.pk == object.creado_por.pk %}
+                            <button class="btn btn-custom borders-secondary text-center d-print-none ms-5"
+                                id="save-escenarios"
+                            >{% translate "Save" %} 💾</button>
+                        {% endif %}
+                        </div>
                     {% for control_id, control in controles.items %}
                     <div class="row {% if not forloop.last %}custom-dashed-border{% endif %} py-3">
                         <div class="col-3">
@@ -279,7 +277,7 @@
                         </div>
                         {% for escenario in escenarios %}
                         <div class="col-3 p-4">
-                            <div class="map" id="map{{ escenario }}"></div>
+                            <div class="map" id="map{{ escenario }}"></div><br>
                         </div>
                         {% endfor %}
                     </div>
@@ -339,6 +337,9 @@
             </div>
         </div>
     </div>
+    <div class="row float-end p-3">
+        <button onclick="window.print()" class="btn btn-custom borders-secondary text-center d-print-none">{% translate "Generate report" %}</button>
+    </div>
 </div>
 {% endblock %}
 
@@ -354,6 +355,7 @@
 <script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.js'></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="{% static 'js/Leaflet.BigImage.js' %}"></script>
 <script src="{% static 'js/L.Map.Sync.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/danfojs@1.1.2/lib/bundle.min.js"></script>
 <!-- Resources -->
@@ -1036,6 +1038,7 @@
                     "OpenStreetMap": osm,
                 };
                 L.control.layers(baseLayers, null, {position: 'topleft'}).addTo(mapas.mapas[i]);
+                L.control.bigImage({position: 'topright'}).addTo(mapas.mapas[i]);
         
                 mapas.mapas[i].on('layeradd', function(e) {
                     if (tmout) {

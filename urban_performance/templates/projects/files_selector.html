@@ -2,10 +2,10 @@
 <div class="row drag-drop-container mt-3" data-name-description="{{ name_description }}" data-kind="{{ kind }}" data-max="{{ max }}" data-accept="{{ accept }}">
     <div class="col-12 p-3">
         <p>
-            {% blocktranslate %}You can create a GeoJson file in QGIS or in ArcGis. The file should have at least one polygon describing the {{ field }}.{% endblocktranslate %}
-            {% blocktranslate %}Layer name is the name that will be displayed on the policy lever drop down menu.{% endblocktranslate %} <span class="color-secondary"> 
-            {% blocktranslate trimmed %}The file should include at least two attributes: ID (with a unique identifier) and DENSITY (describing the population density in 
-            inhabitants per hectare for each polygon).{% endblocktranslate %}</span>
+            {% blocktranslate %}Group all project layers into a ZIP file. Each layer must have a unique identification code based on its type and category {% endblocktranslate %}
+            {% blocktranslate %}(refer to the documentation for more details). You must include a base file for each category, and each additional layer can {% endblocktranslate %}  
+            {% blocktranslate %}contain one or more files. <span class="color-secondary"> Each layer must contain at least one polygon (point, line, or area) {% endblocktranslate %}
+            {% blocktranslate %}depending on the type of information it represents.</span> {% endblocktranslate %}
         </p>
     </div>
     <div class="col-6">
