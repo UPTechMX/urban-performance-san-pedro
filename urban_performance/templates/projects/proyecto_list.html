@@ -357,7 +357,7 @@
         {% for proyecto in object_list %}
         <tr class="bg-2">
             <td>
-                <a href="{% if proyecto.progress == 100 %}{% url 'projects:project_detail' proyecto.pk %}{% endif %}" class="color-secondary">{{ proyecto.nombre }}</a>
+                <a href="{% if proyecto.niveles %}{% url 'projects:project_detail' proyecto.pk %}{% endif %}" class="color-secondary">{{ proyecto.nombre }}</a>
             </td>
             <td class="text-center">{{ proyecto.ultima_actualizacion }}</td>
             <td class="text-center">
