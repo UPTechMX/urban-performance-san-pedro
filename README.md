@@ -10,7 +10,7 @@ Una herramienta web para la planificación urbana.
 ## Instalación
 1. Clone el repositorio de [Urban Performance](https://github.com/UPTechMX/urban-performance-san-pedro) usando git, o, alternativamente, puede descargar el repositorio y descomprimirlo en una carpeta de su preferencia.:
 ```
-      $ git clone https://gitlab.up.technology/uptech/urban-performance
+      $ git clone https://github.com/UPTechMX/urban-performance-san-pedro.git
 ```
 2. Localice y clone los archivos ubicados en `.envs/.local/`, personalice los valores y remueva la extensión `.example` a cada uno.
 3. Ubique el archivo `local.yml`, se trata del archivo docker compose para la construcción de los contenedores, ajústelo a sus necesidades.
