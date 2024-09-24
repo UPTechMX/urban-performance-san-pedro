@@ -352,6 +352,8 @@ class ProjectDetailView(DetailView):
                 "solar_energy_generation",
                 "water_consumption",
                 "energy_consumption_water_supply",
+                "electricity_consumption_buildings",
+                "public_lighting_energy_consumption",
             ],
             "chart": {
                 "enabled": False,
@@ -362,7 +364,7 @@ class ProjectDetailView(DetailView):
         {
             "nombre": "Vivienda y empleo",
             "id": "VYE",
-            "llaves": ["pop_2050", "density", "jobs_density"],
+            "llaves": ["pop_2050", "pop_density", "jobs_density"],
             "chart": {
                 "enabled": True,
                 "tipo": "barra",
@@ -378,10 +380,10 @@ class ProjectDetailView(DetailView):
             "id": "CAM",
             "llaves": [
                 "fp_area",
-                "urban_exp_area",
+                "urban_expansion_area",
                 "vg_area_loss",
                 "permeable_area",
-                "ga_pc",
+                "uga_per_capita",
             ],
             "chart": {
                 "enabled": False,

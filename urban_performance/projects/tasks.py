@@ -32,139 +32,6 @@ from django.db import connection
 import json
 
 
-@shared_task
-def insert_controls_from_csv(proyecto_pk: uuid4):
-    proyecto = Proyecto.objects.get(pk=proyecto_pk)
-    file_path = f"{proyecto.get_folder_path()}results.csv"
-
-    # Query template
-    query_template = "INSERT INTO up_controls ({cols}) VALUES {rows};"
-
-    # Static headers used in the database columns
-    headers = [
-        "project_id",
-        "population_",
-        "footprint",
-        "transit",
-        "nbs",
-        "energy_efficiency",
-        "solar_energy",
-        "rwh",
-        "hospitals",
-        "schools",
-        "sport_centers",
-        "clinics",
-        "daycare",
-        "green_areas",
-        "infrastructure",
-        "jobs",
-        "permeable_areas",
-        "fp_area",
-        "fp_base_area",
-        "pop_2050",
-        "pop_base",
-        "exposed_area",
-        "pc_exposed_tr",
-        "pc_exposed_hp",
-        "pc_exposed_sc",
-        "pc_exposed_infra",
-        "inter_pop",
-        "pc_exposed_pop",
-        "pc_pop_hp",
-        "pc_pop_sc",
-        "pc_pop_sp",
-        "pc_pop_cl",
-        "pc_pop_dc",
-        "pc_pop_uga",
-        "pop_density",
-        "urban_expansion_area",
-        "jobs_density",
-        "vg_area_loss",
-        "permeable_area",
-        "change_electricity_consumption",
-        "electricity_consumption",
-        "electricity_consumption_buildings",
-        "electricity_consumption_ee",
-        "electricity_consumption_ee_per_capita",
-        "emissions_tot_tr",
-        "transport_emissions_per_capita",
-        "solar_energy_generation",
-        "public_lighting_energy_consumption",
-        "maintenance_fp",
-        "maintenance_tr",
-        "maintenance_cost",
-        "school_c_cost",
-        "new_sc",
-        "hospital_c_cost",
-        "new_hp",
-        "sp_c_cost",
-        "new_sp",
-        "clinic_c_cost",
-        "new_cl",
-        "daycare_c_cost",
-        "new_dc",
-        "ga_c_cost",
-        "capital_cost",
-        "capital_solar_1",
-        "capital_solar",
-        "uga_area",
-        "uga_per_capita",
-        "increased_kvr",
-        "expected_vmt",
-        "increase_bicycle",
-        "increase_private",
-        "increase_public_transport",
-        "pc_media_hu",
-        "pc_popular_hu",
-        "pc_residencial_hu",
-        "water_consumption",
-        "energy_consumption_water_supply",
-    ]
-
-    def save_values(query: str):
-        with connection.cursor() as cursor:
-            try:
-                cursor.execute(query)
-            except Exception as error:
-                print(f"Error while executing query: {error}")
-
-    batch_size = 1000  # Adjust based on available memory
-    batch = []
-    row_count = 0
-
-    with open(file_path, newline="") as csvfile:
-        controls_reader = csv.reader(csvfile, delimiter=",")
-        next(controls_reader)  # Skip header row
-
-        for row in controls_reader:
-            if row_count >= 399000:
-                row.insert(
-                    0, str(proyecto_pk)
-                )  # Insert the project ID at the beginning
-                row.insert(43, 0)  # Insert the project ID at the beginning
-                row = [
-                    f"'{value}'" if i <= len(headers) - 1 else str(float(value))
-                    for i, value in enumerate(row)
-                ]
-                batch.append(f"({','.join(row)})")
-
-                if len(batch) >= batch_size:
-                    query_final = query_template.format(
-                        cols=",".join(headers), rows=",".join(batch)
-                    )
-                    save_values(query_final)
-                    batch.clear()  # Clear the batch to free memory
-
-            row_count += 1
-
-        # Insert remaining records
-        if batch:
-            query_final = query_template.format(
-                cols=",".join(headers), rows=",".join(batch)
-            )
-            save_values(query_final)
-
-
 def set_proyecto_progress(proyecto_pk: uuid4, progress: int):
     proyecto = Proyecto.objects.get(pk=proyecto_pk)
     proyecto.progress = progress
@@ -1264,15 +1131,17 @@ def urban_performance_partial(scenario, proyecto_pk, proyecto, assumptions):
 
     # Modal Distribution (KVR)
     modal_distribution_elasticity = assumptions["md_elasticity"]
-    md_public_transport = assumptions["md_tr"]
-    md_private = assumptions["md_w"]
+    md_private = assumptions["md_tr"]
+    md_public_transport = assumptions["md_w"]
     md_bicycle = assumptions["md_b"]
     expected_change_modal_distribution = density_change * modal_distribution_elasticity
     increase_public_transport = (
         md_public_transport - expected_change_modal_distribution * md_public_transport
     )
+    public_tra_change = md_public_transport - increase_public_transport
     increase_bicycle = md_bicycle - expected_change_modal_distribution * md_bicycle
-    increase_private = md_private - increase_public_transport - increase_bicycle
+    bicycle_change = md_bicycle - increase_bicycle
+    increase_private = md_private - public_tra_change - increase_bicycle
 
     # Maintenance and Capital Costs
     maintenance_cost = (
@@ -1374,7 +1243,42 @@ def process_scenario_chunk(
     proyecto = Proyecto.objects.get(pk=proyecto_pk)
     working_dir = proyecto.get_folder_path()
 
-    query_template = "INSERT INTO urban_performance_controls ({cols}) VALUES {rows};"
+    query_template = """INSERT INTO urban_performance_controls ({cols}) VALUES {rows} ON CONFLICT (
+        project_id,
+        population_,
+        footprint,
+        transit,
+        nbs,
+        energy_efficiency,
+        solar_energy,
+        rwh,
+        hospitals,
+        schools,
+        sport_centers,
+        clinics,
+        daycare,
+        green_areas,
+        infrastructure,
+        jobs,
+        permeable_areas
+    ) DO UPDATE SET
+        population_=EXCLUDED.population_,
+        footprint=EXCLUDED.footprint,
+        transit=EXCLUDED.transit,
+        nbs=EXCLUDED.nbs,
+        energy_efficiency=EXCLUDED.energy_efficiency,
+        solar_energy=EXCLUDED.solar_energy,
+        rwh=EXCLUDED.rwh,
+        hospitals=EXCLUDED.hospitals,
+        schools=EXCLUDED.schools,
+        sport_centers=EXCLUDED.sport_centers,
+        clinics=EXCLUDED.clinics,
+        daycare=EXCLUDED.daycare,
+        green_areas=EXCLUDED.green_areas,
+        infrastructure=EXCLUDED.infrastructure,
+        jobs=EXCLUDED.jobs,
+        permeable_areas=EXCLUDED.permeable_areas
+    ;"""
 
     assumptions_dir = working_dir + "/assumptions"
     assumptions = pd.read_csv(assumptions_dir + "/assumptions_SP.csv")
@@ -1565,86 +1469,6 @@ def save_values(result: Any = None, proyecto_pk: str = ""):
     infra = read_filenames_from_path(path[10])
     jobs = read_filenames_from_path(path[11])
     perm = read_filenames_from_path(path[12])
-
-    # # Header for the CSV file
-    # header = [
-    #     "population_",
-    #     "footprint",
-    #     "transit",
-    #     "nbs",
-    #     "energy_efficiency",
-    #     "solar_energy",
-    #     "rwh",
-    #     "hospitals",
-    #     "schools",
-    #     "sport_centers",
-    #     "clinics",
-    #     "daycare",
-    #     "green_areas",
-    #     "infrastructure",
-    #     "jobs",
-    #     "permeable_areas",
-    #     "fp_area",
-    #     "fp_base_area",
-    #     "pop_2050",
-    #     "pop_base",
-    #     "exposed_area",
-    #     "pc_exposed_tr",
-    #     "pc_exposed_hp",
-    #     "pc_exposed_sc",
-    #     "pc_exposed_infra",
-    #     "inter_pop",
-    #     "pc_exposed_pop",
-    #     "pc_pop_hp",
-    #     "pc_pop_sc",
-    #     "pc_pop_sp",
-    #     "pc_pop_cl",
-    #     "pc_pop_dc",
-    #     "pc_pop_uga",
-    #     "pop_density",
-    #     "urban_expansion_area",
-    #     "jobs_density",
-    #     "vg_area_loss",
-    #     "permeable_area",
-    #     "change_electricity_consumption",
-    #     "electricity_consumption",
-    #     "electricity_consumption_buildings",
-    #     "electricity_consumption_ee",
-    #     "electricity_consumption_ee_per_capita",
-    #     "emissions_tot_tr",
-    #     "transport_emissions_per_capita",
-    #     "solar_energy_generation",
-    #     "public_lighting_energy_consumption",
-    #     "maintenance_fp",
-    #     "maintenance_tr",
-    #     "maintenance_cost",
-    #     "school_c_cost",
-    #     "new_sc",
-    #     "hospital_c_cost",
-    #     "new_hp",
-    #     "sp_c_cost",
-    #     "new_sp",
-    #     "clinic_c_cost",
-    #     "new_cl",
-    #     "daycare_c_cost",
-    #     "new_dc",
-    #     "ga_c_cost",
-    #     "capital_cost",
-    #     "capital_solar_1",
-    #     "capital_solar",
-    #     "uga_area",
-    #     "uga_per_capita",
-    #     "increased_kvr",
-    #     "expected_vmt",
-    #     "increase_bicycle",
-    #     "increase_private",
-    #     "increase_public_transport",
-    #     "pc_media_hu",
-    #     "pc_popular_hu",
-    #     "pc_residencial_hu",
-    #     "water_consumption",
-    #     "energy_consumption_water_supply",
-    # ]
 
     # # Prepare CSV file
     now = datetime.now()

@@ -71,6 +71,7 @@ class ProyectoViewSet(viewsets.ModelViewSet):
 
             proyecto.estatus = ProyectoStatus.PROCESSING
             proyecto.save()
+
             chain(
                 process_project_controls.s(proyecto_pk=proyecto.pk)
                 | save_values.s(proyecto_pk=proyecto.pk)
