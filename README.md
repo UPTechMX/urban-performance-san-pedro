@@ -8,7 +8,7 @@ Una herramienta web para la planificación urbana.
 - La virtualización debe estar permitida en el equipo donde se vaya a instalar.
 
 ## Instalación
-1. Clone el repositorio de [Urban Performance](https://gitlab.up.technology/uptech/urban-performance) usando git, o, alternativamente, puede descargar el repositorio y descomprimirlo en una carpeta de su preferencia.:
+1. Clone el repositorio de [Urban Performance](https://github.com/UPTechMX/urban-performance-san-pedro) usando git, o, alternativamente, puede descargar el repositorio y descomprimirlo en una carpeta de su preferencia.:
 ```
       $ git clone https://gitlab.up.technology/uptech/urban-performance
 ```
