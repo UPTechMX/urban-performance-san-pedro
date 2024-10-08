@@ -50,7 +50,7 @@ class ProyectoSerializer(serializers.ModelSerializer):
                 import traceback
                 traceback.print_exc()
                 self._errors["assumptions"] = [
-                    _("Please introduce a valid CSV file.")
+                    _("Please introduce a valid CSV file, check extension and codification (UTF-8).")
                 ]
                 valid = False
 

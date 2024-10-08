@@ -352,6 +352,7 @@
 {{ escenarios|json_script:'escenarios' }}
 {{ base_map_elements|json_script:'base_map_elements' }}
 {{ categorias|json_script:'categorias' }}
+{{ escenarios_order|json_script:'escenarios_order' }}
 <script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.js'></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -425,7 +426,7 @@
             for (var i = 1; i <= 3; i++) {
                 var series = chart.series.push(
                     am5radar.RadarLineSeries.new(root, {
-                        name: "Escenario " + i,
+                        name: `${escenarios[escenarios_order[i-1]].nombre}`,
                         xAxis: xAxis,
                         yAxis: yAxis,
                         valueYField: "value" + i,
@@ -433,7 +434,7 @@
                         fill: am5.color(seriesColors[i - 1]),
                         stroke: am5.color(seriesColors[i - 1]),
                         tooltip: am5.Tooltip.new(root, {
-                            labelText: "{valueY}%"
+                            labelText: "{name}: {valueY}%"
                         })
                     })
                 );
@@ -535,7 +536,7 @@
         for (var i = 1; i <= 3; i++) {
             var series = chart.series.push(
                 am5radar.RadarColumnSeries.new(root, {
-                    name: "Escenario " + i,
+                    name: `${escenarios[escenarios_order[i-1]].nombre}`,
                     xAxis: xAxis,
                     yAxis: yAxis,
                     valueYField: "value" + i,
@@ -684,7 +685,7 @@
                             category: addLineBreaks(`${indicators[campo]["nombre"]} (${indicators[campo]["unidad"]})`),
                         }
                         var counter=1;
-                        for (let i in escenarios) {
+                        for (let i of escenarios_order) {
                             sub_df = escenarios_sub_dfs[i];
                             manipulable_data = dfd.toJSON(sub_df)[0];
                             chart_category[`value${counter}`] = manipulable_data[campo];
@@ -714,7 +715,7 @@
                         ],
                     ]
                     var j = 0;
-                    for (let i in escenarios) {
+                    for (let i of escenarios_order) {
                         escenario = escenarios[i];
                         serie = {
                             scenario: escenario.nombre,
@@ -744,6 +745,7 @@
     var controles = JSON.parse($('#controles').text());
     var indicators = JSON.parse($('#indicadores').text());
     // var ci = JSON.parse($('#ci').text());
+    var escenarios_order = JSON.parse($('#escenarios_order').text());
     var escenarios = JSON.parse($('#escenarios').text());
     var base_map_elements = JSON.parse($('#base_map_elements').text());
     var categorias = JSON.parse($('#categorias').text());
@@ -757,8 +759,30 @@
         "nbs": "#2c4200",
         "vision": "#8db736",
     }
+    var niveles = {}
 
     // df = new dfd.DataFrame(ci);
+
+    function loadniveles() {
+        for (let cur_sc in escenarios) {
+            sub_df = escenarios_sub_dfs[cur_sc];
+            manipulable_data = dfd.toJSON(sub_df)[0];
+            for (key in manipulable_data) {
+                if (key in indicators) {
+                    input_value = manipulable_data[key];
+                    indicator = indicators[key];
+                    min_value = niveles[key].menor;
+                    max_value = niveles[key].mayor;
+                    input_value = manipulable_data[key];
+                    porcentaje = calcularPorcentaje(min_value, max_value, input_value);
+                    container = $(`[data-indicator="con-${key}"][data-scenario="${cur_sc}"]`);
+                    container.find('.progress-bar').css('width', `${porcentaje}%`);
+                    container.find('.progress-bar').attr('aria-valuenow', `${porcentaje}`);
+                    container.find('.tag').html(`<b>${input_value.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</b> (${indicator['unidad']})`);
+                }
+            }
+        }
+    }
 
     function orderLayers() {
         const priorityOrder = ["BT", "transit", "NB", "HZ", "BF", "urban_footprint"];
@@ -803,6 +827,9 @@
     }
 
     function calcularPorcentaje(minimo, maximo, entrada) {
+        if(maximo==minimo) {
+            return 50
+        }
         // Verificar que la entrada no esté fuera de los límites
         if (entrada < minimo || entrada > maximo) {
             return 0
@@ -871,20 +898,25 @@
                 manipulable_data = dfd.toJSON(sub_df)[0];
                 for (key in manipulable_data) {
                     if (key in indicators) {
-                        indicator = indicators[key]
-                        min_value = indicator['niveles']['menor']
-                        max_value = indicator['niveles']['mayor']
-                        input_value = manipulable_data[key]
-                        porcentaje = calcularPorcentaje(min_value, max_value, input_value)
-                        container = $(`[data-indicator="con-${key}"][data-scenario="${cur_sc}"]`)
-                        container.find('.progress-bar').css('width', `${porcentaje}%`)
-                        container.find('.progress-bar').attr('aria-valuenow', `${porcentaje}`)
-                        container.find('.tag').html(`<b>${input_value.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</b> (${indicators[key]['unidad']})`)
+                        input_value = manipulable_data[key];
+                        if (!niveles.hasOwnProperty(key)) {
+                            niveles[key] = {
+                                "menor": Infinity,
+                                "mayor": 0
+                            }
+                        }
+                        if(input_value > niveles[key].mayor) {
+                            niveles[key].mayor = input_value
+                        }
+                        if(input_value < niveles[key].menor) {
+                            niveles[key].menor = input_value
+                        }
                     }
                 }
                 escenarios_sub_dfs[cur_sc] = sub_df;
                 if (Object.keys(escenarios_sub_dfs).length >= 3) {
                     loadgraphs();
+                    loadniveles();
                 }
             }
         );
@@ -969,7 +1001,7 @@
                 step2(BFLayer);
             });
         function step3() {
-            for (let i in escenarios) {
+            for (let i of escenarios_order) {
                 for (let j in escenarios) {
                     if(j != i) {
                         mapas.mapas[i].sync(mapas.mapas[j])
@@ -990,7 +1022,7 @@
                 cur_sc = evt.target.dataset["scenario"];
                 trigger_indicators(cur_sc);
             });
-            for (let i in escenarios) {
+            for (let i of escenarios_order) {
                 var escenario_controls_value = escenarios[i].structure.controles;
                 for (const [control_id, value] of Object.entries(escenario_controls_value)) {
                     var control_element = $(`[data-target-indicator="${control_id}"][data-scenario="${i}"]`);
@@ -1284,7 +1316,7 @@
         const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLive[0]);
 
         $("#save-escenarios").on("click", function () {
-            for (let i in escenarios) {
+            for (let i of escenarios_order) {
                 var payload = {
                     structure: {
                         controles: {},

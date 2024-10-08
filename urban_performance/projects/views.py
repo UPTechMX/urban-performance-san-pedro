@@ -305,8 +305,6 @@ class ProjectListView(ListView):
                     create_defaults(project_instance=proyecto_instance)
                     chain(
                         process_project_controls.s(proyecto_instance.pk)
-                        | save_values.s(proyecto_pk=proyecto_instance.pk)
-                        | create_niveles.s(proyecto_pk=proyecto_instance.pk)
                     )()
                     messages.success(
                         request,
@@ -456,6 +454,7 @@ class ProjectDetailView(DetailView):
         context["controles"] = utils.get_controlls(obj, df_controls)
         context["indicadores"] = utils.get_indicators(obj, df_controls)
         context["escenarios"] = utils.get_scenarios(obj)
+        context["escenarios_order"] = [x for x in context["escenarios"].keys()]
         context["base_map_elements"] = utils.get_base_map_elements(obj)
         context["obj_pk"] = obj.pk
         if self.request.user.is_authenticated:

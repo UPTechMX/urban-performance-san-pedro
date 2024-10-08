@@ -22,6 +22,7 @@ from urban_performance.projects.tasks import (
     process_project_controls,
     save_values,
     create_niveles,
+    urban_performance_partial,
 )
 from urban_performance.projects.utils import validate_assumptions_df
 from urban_performance.up_geo.serializers import SpatialFileSerializer
@@ -52,7 +53,7 @@ class ProyectoViewSet(viewsets.ModelViewSet):
             df = pd.DataFrame(serializer.validated_data["data"])
             is_valid = validate_assumptions_df(df=df, request=request)
         except Exception as e:
-            messages.error(request, _("Please introduce a valid CSV file."))
+            messages.error(request, _("Please introduce a valid CSV file, check extension and codification (UTF-8)."))
             is_valid = False
         if is_valid:
             data = serializer.validated_data["data"]
@@ -72,11 +73,7 @@ class ProyectoViewSet(viewsets.ModelViewSet):
             proyecto.estatus = ProyectoStatus.PROCESSING
             proyecto.save()
 
-            chain(
-                process_project_controls.s(proyecto_pk=proyecto.pk)
-                | save_values.s(proyecto_pk=proyecto.pk)
-                | create_niveles.s(proyecto_pk=proyecto.pk)
-            )()
+            chain(process_project_controls.s(proyecto_pk=proyecto.pk))()
         return HttpResponse()
 
     def update(self, request, *args, **kwargs):
@@ -188,11 +185,7 @@ class ProyectoViewSet(viewsets.ModelViewSet):
                 else:
                     messages.error(request, "A valid zip file must be uploaded.")
             if request.data.get("assumptions") or request.data.get("spatial_zip_file"):
-                chain(
-                    process_project_controls.s(proyecto_pk=proyecto.pk)
-                    | save_values.s(proyecto_pk=proyecto.pk)
-                    | create_niveles.s(proyecto_pk=proyecto.pk)
-                )()
+                chain(process_project_controls.s(proyecto_pk=proyecto.pk))()
 
             messages.success(
                 request,
@@ -286,9 +279,10 @@ class FilterUpControlsView(View):
         try:
             # Parse the JSON request body
             data = json.loads(request.body)
+            proyecto_pk = kwargs.get("proyecto_pk")
 
             # Start building the SQL query
-            sql_query = f"SELECT * FROM urban_performance_controls WHERE project_id='{kwargs['proyecto_pk']}' AND "
+            sql_query = f"SELECT * FROM urban_performance_controls WHERE project_id='{proyecto_pk}' AND "
             sql_conditions = []
 
             # Add each dictionary element as a filter (key='value')
@@ -304,10 +298,43 @@ class FilterUpControlsView(View):
                 cursor.execute(sql_query)
                 columns = [col[0] for col in cursor.description]
                 rows = cursor.fetchall()
+                [
+                    [],
+                ]
 
             # Convert the result to a list of dictionaries
+            if not rows:
+                scenario = (
+                    data["population_"],
+                    data["footprint"],
+                    data["transit"],
+                    data["nbs"],
+                    data["energy_efficiency"],
+                    data["solar_energy"],
+                    data["rwh"],
+                    data["hospitals"],
+                    data["schools"],
+                    data["sport_centers"],
+                    data["clinics"],
+                    data["daycare"],
+                    data["green_areas"],
+                    data["infrastructure"],
+                    data["jobs"],
+                    data["permeable_areas"],
+                )
+                proyecto = Proyecto.objects.get(pk=proyecto_pk)
+                assumptions = pd.read_csv(proyecto.assumptions.path)
+                assumptions = dict(zip(assumptions["code"], assumptions["value"]))
+                rows = [
+                    [0, proyecto_pk]
+                    + urban_performance_partial(
+                        scenario=scenario,
+                        proyecto_pk=proyecto_pk,
+                        proyecto=proyecto,
+                        assumptions=assumptions,
+                    )
+                ]
             results = [dict(zip(columns, row)) for row in rows]
-
             # Return the results as a JSON response
             return JsonResponse({"results": results}, status=200)
         except json.JSONDecodeError:

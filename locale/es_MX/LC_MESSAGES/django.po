@@ -27,8 +27,8 @@ msgstr "API"
 
 #: urban_performance/api/views.py:55
 #: urban_performance/projects/serializers.py:53
-msgid "Please introduce a valid CSV file."
-msgstr "Por favor introduzca un archivo CSV válido."
+msgid "Please introduce a valid CSV file, check extension and codification (UTF-8)."
+msgstr "Por favor introduzca un archivo CSV válido, revise extensión y codificación (UTF-8)."
 
 #: urban_performance/projects/apps.py:9
 msgid "Projects"

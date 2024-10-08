@@ -87,7 +87,7 @@ def get_indicators(obj: Proyecto, df_controls: pd.DataFrame):
                     "campo": x.campo,
                     "unidad": x.unidad,
                     "nombre": x.nombre,
-                    "niveles": json.loads(obj.niveles)[x.campo.lower()],
+                    # "niveles": json.loads(obj.niveles).get(x.campo.lower()),
                     "descripcion": x.descripcion,
                 }
             }
@@ -127,7 +127,7 @@ def get_scenarios(obj: Proyecto):
     for escenario in escenarios:
         escenarios_dict.update(
             {
-                escenario.pk: {
+                str(escenario.pk): {
                     "nombre": escenario.nombre,
                     "structure": escenario.structure,
                     "descripcion": escenario.descripcion,

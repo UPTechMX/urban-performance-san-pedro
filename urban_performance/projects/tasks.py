@@ -1,3 +1,5 @@
+import time
+import numpy as np
 import pandas as pd
 import geopandas as gpd
 import fiona
@@ -81,9 +83,28 @@ def read_filenames_from_path(path):
     return filenames
 
 
+def make_serializable(value):
+    if isinstance(value, np.integer):
+        return int(value)
+    elif isinstance(value, np.floating):
+        return float(value)
+    elif isinstance(value, tuple):
+        return list(map(make_serializable, value))
+    elif isinstance(value, dict):
+        return {k: make_serializable(v) for k, v in value.items()}
+    elif isinstance(value, list):
+        return [make_serializable(v) for v in value]
+    else:
+        return value
+
+
 @shared_task(soft_time_limit=300000, time_limit=300001)
 def process_project_controls(proyecto_pk: uuid4):
-    proyecto = Proyecto.objects.get(pk=proyecto_pk)
+    proyecto = None
+    while not proyecto:
+        proyecto = Proyecto.objects.filter(pk=proyecto_pk)
+        time.sleep(1)
+    proyecto = proyecto[0]
     folder_path = proyecto.get_folder_path()
     set_proyecto_progress(proyecto_pk=proyecto_pk, progress=0)
 
@@ -148,7 +169,7 @@ def process_project_controls(proyecto_pk: uuid4):
     roads_base_projected = roads_base.to_crs("World_Mollweide")
     exposure_polygon_projected = hazard.to_crs("World_Mollweide")
 
-    set_proyecto_progress(proyecto_pk=proyecto_pk, progress=5)
+    set_proyecto_progress(proyecto_pk=proyecto_pk, progress=20)
 
     # BASE CALCULATIONS |||||||||||||||||||||||||||||||||||||
 
@@ -274,7 +295,7 @@ def process_project_controls(proyecto_pk: uuid4):
     # scenarios = [*product(population, footprint, transit, nbs, energy_efficieny, solar_energy, RWH, hospitals, schools, sports, clinics, daycare, UGA, infra, jobs, perm)]
 
     """# Partial results (URBAN PERFORMANCE)"""
-    progress = 9
+    progress = 20
 
     set_proyecto_progress(proyecto_pk=proyecto_pk, progress=progress)
 
@@ -282,12 +303,19 @@ def process_project_controls(proyecto_pk: uuid4):
     partial_pop = {}
 
     for filename in population:
-        progress += 2
+        progress += 10
         # Read file & reproject geojson
         pop = gpd.read_file(path[0] + filename)
         pop_projected = pop.to_crs("World_Mollweide")
         # Get population
         pop_2050 = round(pop["Pop_total"].sum(), 0)  # future population
+
+        # Calculate density
+        pop_projected["Shape_Area"] = pop_projected.area / 1e4
+        pop_projected["DENS2050"] = (
+            pop_projected["Pop_total"] / pop_projected["Shape_Area"]
+        )
+
         # Intersect population with hazards
         inter = gpd.overlay(
             pop_projected, exposure_polygon_projected, how="intersection"
@@ -382,15 +410,15 @@ def process_project_controls(proyecto_pk: uuid4):
             # Calculate area
             inter["Shape_Area"] = inter.area / 1e4  # NEW
             exposed_area = inter["Shape_Area"].sum()
-            inter["Pop_total"] = (
-                inter.iloc[:, 9].astype(float) * inter["Shape_Area"]
-            )  # NEW
+            inter["Pop_total"] = inter["DENS2050"] * inter["Shape_Area"]  # NEW
             exposed_pop = round(
                 inter["Pop_total"].sum(), 0
             )  # total population exposed to hazards
             pc_exposed_pop = (
                 inter["Pop_total"].sum() * 100 / pop_2050
             )  # NEW #percentage of population exposed to hazards
+            if pc_exposed_pop > 100:
+                pc_exposed_pop = 100
 
             # __ASSUMPTIONS__
             # Capital cost NBS
@@ -443,11 +471,13 @@ def process_project_controls(proyecto_pk: uuid4):
             # Calculate area
             hp_intersection["Shape_Area"] = hp_intersection.area / 1e4  # NEW
             hp_intersection["Pop_total"] = (
-                hp_intersection.iloc[:, 9].astype(float) * hp_intersection["Shape_Area"]
+                hp_intersection["DENS2050"] * hp_intersection["Shape_Area"]
             )  # NEW
             pc_pop_near_hp = (
                 hp_intersection["Pop_total"].sum() * 100 / pop_2050
             )  # NEW #percentage of population near a hospital
+            if pc_pop_near_hp > 100:
+                pc_pop_near_hp = 100
             partial_hp[hp_filename] = pc_pop_near_hp
 
         # SCHOOLS |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -468,11 +498,13 @@ def process_project_controls(proyecto_pk: uuid4):
             # Calculate area
             sc_intersection["Shape_Area"] = sc_intersection.area / 1e4  # NEW
             sc_intersection["Pop_total"] = (
-                sc_intersection.iloc[:, 9].astype(float) * sc_intersection["Shape_Area"]
+                sc_intersection["DENS2050"] * sc_intersection["Shape_Area"]
             )  # NEW
             pc_pop_near_sc = (
                 sc_intersection["Pop_total"].sum() * 100 / pop_2050
             )  # NEW #percentage of population near a school
+            if pc_pop_near_sc > 100:
+                pc_pop_near_sc = 100
             partial_sc[sc_filename] = pc_pop_near_sc
 
         # SPORTS |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -491,11 +523,13 @@ def process_project_controls(proyecto_pk: uuid4):
             # pk_intersection.plot()
             sp_intersection["Shape_Area"] = sp_intersection.area / 1e4  # NEW
             sp_intersection["Pop_total"] = (
-                sp_intersection.iloc[:, 9].astype(float) * sp_intersection["Shape_Area"]
+                sp_intersection["DENS2050"] * sp_intersection["Shape_Area"]
             )  # NEW
             pc_pop_near_sp = (
                 sp_intersection["Pop_total"].sum() * 100 / pop_2050
             )  # NEW #percentage of population near a sport center
+            if pc_pop_near_sp > 100:
+                pc_pop_near_sp = 100
             partial_sp[sp_filename] = pc_pop_near_sp
 
         # CLINICS ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -514,11 +548,13 @@ def process_project_controls(proyecto_pk: uuid4):
 
             cl_intersection["Shape_Area"] = cl_intersection.area / 1e4  # NEW
             cl_intersection["Pop_total"] = (
-                cl_intersection.iloc[:, 9].astype(float) * cl_intersection["Shape_Area"]
+                cl_intersection["DENS2050"] * cl_intersection["Shape_Area"]
             )  # NEW
             pc_pop_near_cl = (
                 cl_intersection["Pop_total"].sum() * 100 / pop_2050
             )  # NEW percentage of population near a health clinic
+            if pc_pop_near_cl > 100:
+                pc_pop_near_cl = 100
             partial_cl[cl_filename] = pc_pop_near_cl
 
         # DAYCARE ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -537,9 +573,11 @@ def process_project_controls(proyecto_pk: uuid4):
 
             dc_intersection["Shape_Area"] = dc_intersection.area / 1e4  # NEW
             dc_intersection["Pop_total"] = (
-                dc_intersection.iloc[:, 9].astype(float) * dc_intersection["Shape_Area"]
+                dc_intersection["DENS2050"] * dc_intersection["Shape_Area"]
             )  # NEW
             pc_pop_near_dc = dc_intersection["Pop_total"].sum() * 100 / pop_2050  # NEW
+            if pc_pop_near_dc > 100:
+                pc_pop_near_dc = 100
             partial_dc[dc_filename] = pc_pop_near_dc
 
         # UGA |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -564,12 +602,13 @@ def process_project_controls(proyecto_pk: uuid4):
             # Calculate area
             uga_intersection["Shape_Area"] = uga_intersection.area / 1e4  # NEW
             uga_intersection["Pop_total"] = (
-                uga_intersection.iloc[:, 9].astype(float)
-                * uga_intersection["Shape_Area"]
+                uga_intersection["DENS2050"] * uga_intersection["Shape_Area"]
             )  # NEW
             pc_pop_near_uga = (
                 uga_intersection["Pop_total"].sum() * 100 / pop_2050
             )  # NEW # percentage of population near a green area
+            if pc_pop_near_uga > 100:
+                pc_pop_near_uga = 100
 
             # __ASSUMPTIONS__
             # Capital cost ga
@@ -657,9 +696,8 @@ def process_project_controls(proyecto_pk: uuid4):
             partial_UGA,
             partial_ht,
         )
-        set_proyecto_progress(proyecto_pk=proyecto_pk, progress=progress)
 
-    set_proyecto_progress(proyecto_pk=proyecto_pk, progress=15)
+    set_proyecto_progress(proyecto_pk=proyecto_pk, progress=71)
     print(partial_pop)
 
     # Partial results FOOTPRINT ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬
@@ -901,7 +939,7 @@ def process_project_controls(proyecto_pk: uuid4):
             capital_fp,
         )
 
-    set_proyecto_progress(proyecto_pk=proyecto_pk, progress=24)
+    set_proyecto_progress(proyecto_pk=proyecto_pk, progress=75)
     print(partial_fp)
 
     # Partial results TRANSIT ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬
@@ -931,10 +969,18 @@ def process_project_controls(proyecto_pk: uuid4):
         # Get the new extension of the transit lines
         dif_tr_length = dif_tr.length.sum() / 1e3
         capital_tr = dif_tr_length * capital_factor_tr
+        dif_tr_buffer = dif_tr.buffer(800)
+        dif_tr_buffer = gpd.GeoDataFrame(geometry=gpd.GeoSeries(dif_tr_buffer))
+        dif_tr_buffer_area = dif_tr_buffer.area.sum() / 1e6
 
-        partial_tr[filename] = (tr_buffer_area, maintenance_tr, capital_tr)
+        partial_tr[filename] = (
+            dif_tr_buffer_area,
+            tr_buffer_area,
+            maintenance_tr,
+            capital_tr,
+        )
 
-    set_proyecto_progress(proyecto_pk=proyecto_pk, progress=32)
+    set_proyecto_progress(proyecto_pk=proyecto_pk, progress=80)
     print(partial_tr)
 
     # Partial results PERMEABLE AREAS ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬
@@ -967,8 +1013,9 @@ def process_project_controls(proyecto_pk: uuid4):
         "fp_base_area": fp_base_area,
         "pop_base": pop_base,
     }
-    set_proyecto_progress(proyecto_pk=proyecto_pk, progress=36)
-    proyecto.partial_processing = partial_data_processed
+    set_proyecto_progress(proyecto_pk=proyecto_pk, progress=100)
+    proyecto.partial_processing = make_serializable(partial_data_processed)
+    proyecto.estatus = ProyectoStatus.READY
     proyecto.save()
 
 
@@ -1049,8 +1096,8 @@ def urban_performance_partial(scenario, proyecto_pk, proyecto, assumptions):
         partial_ht["Popular_hu"],
         partial_ht["Residencial_hu"],
     )
-
     water_consumption, energy_consumption_water_supply = partial_ht[str(rwh)]
+
     (
         fp_area,
         partial_sc,
@@ -1076,7 +1123,7 @@ def urban_performance_partial(scenario, proyecto_pk, proyecto, assumptions):
     solar_energy_generation, capital_solar_1, capital_solar = partial_solar[
         str(solar_energy_p)
     ]
-    tr_buffer_area, maintenance_tr, capital_tr = partial_tr[tr_str]
+    dif_tr_buffer_area, tr_buffer_area, maintenance_tr, capital_tr = partial_tr[tr_str]
     permeable_area = partial_perm[perm]
 
     # Calculate intermediary results
@@ -1109,6 +1156,7 @@ def urban_performance_partial(scenario, proyecto_pk, proyecto, assumptions):
     electricity_consumption_ee_per_capita = electricity_consumption_ee / pop_2050
 
     # GHG emissions
+    # GHG emissions
     emissions_factor = assumptions["emissions_factor"]
     elasticity_emission = assumptions["elasticity_emissions"]
     emissions_transport_percentage = assumptions["emissions_transport_percentage"]
@@ -1116,11 +1164,15 @@ def urban_performance_partial(scenario, proyecto_pk, proyecto, assumptions):
     emissions_base_ee = ec_base_with_ee * emissions_factor
     change_in_emissions = -density_change * elasticity_emission
     emissions = emissions_base_ee * (1 + change_in_emissions / 100)
-    emissions_pc = emissions / pop_2050
-    emissions_tr = emissions * (emissions_transport_percentage / 100)
-    emissions_tot_tr = (
-        pop_2050 - tr_buffer_area / fp_area * pop_2050 * 0.15
-    ) * emissions_pc + tr_buffer_area / fp_area * pop_2050 * emissions_pc * 0.85
+    emissions_tr = emissions * emissions_transport_percentage / 21
+    # emissions_tr = emissions * (emissions_transport_percentage / 100)
+    emissions_pc = emissions_tr / pop_2050
+    pop_tr_adjust = pop_2050 * (dif_tr_buffer_area / fp_area)
+    pop_other_adjust = pop_2050 - pop_tr_adjust
+    emissions_tot_tr = (pop_tr_adjust * (emissions_pc * 0.75)) + (
+        pop_other_adjust * emissions_pc
+    )
+    # emissions_tot_tr = (pop_2050 - tr_buffer_area / fp_area * pop_2050 * 0.15) * emissions_pc + tr_buffer_area / fp_area * pop_2050 * emissions_pc * 0.85
     transport_emissions_per_capita = emissions_tot_tr / pop_2050
 
     # VMT
@@ -1286,7 +1338,7 @@ def process_scenario_chunk(
         permeable_area=EXCLUDED.permeable_area,
         change_electricity_consumption=EXCLUDED.change_electricity_consumption,
         electricity_consumption=EXCLUDED.electricity_consumption,
-        electricity_consumption_buildi=EXCLUDED.electricity_consumption_buildingsngs,
+        electricity_consumption_buildings=EXCLUDED.electricity_consumption_buildings,
         electricity_consumption_ee=EXCLUDED.electricity_consumption_ee,
         electricity_consumption_ee_per=EXCLUDED.electricity_consumption_ee_per_capita_capita,
         emissions_tot_tr=EXCLUDED.emissions_tot_tr,
